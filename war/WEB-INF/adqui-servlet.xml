@@ -1,0 +1,306 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<!--
+  - DispatcherServlet application context for the Spring web MVC
+  - implementation of JPetStore's web tier.
+-->
+<beans>
+
+  <!-- ========================= VIEW DEFINITIONS ========================= -->
+
+  <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+    <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
+    <property name="prefix" value="/WEB-INF/jsp/"/>
+    <property name="suffix" value=".jsp"/>
+  </bean>
+
+  <!-- ========================= DEFINITIONS OF PUBLIC CONTROLLERS ========================= -->
+  
+<bean id="defaultHandlerMapping" class="org.springframework.web.servlet.handler.BeanNameUrlHandlerMapping"/>
+
+
+<!-- ========================= NOTA DE CONFORMIDAD ========================= -->
+<bean name="/GetNotaConformidad.umsa" class="org.umsa.web.operaciones.GetNotaConformidad"/>
+<bean name="/UpdateNotaConformidad.umsa" class="org.umsa.web.operaciones.UpdateNotaConformidad"/>
+
+
+<!-- Generar Orden de Compra-->
+  <!--bean name="/ReporteNotaConformidad.umsa" class="org.umsa.web.transaccionMateriales.reportes.ReporteNotaConformidad2"/-->
+  
+  <bean name="/GetTipoItem.umsa" class="org.umsa.web.operaciones.GetTipoItem"/>
+  <bean name="/GetUnidadMedida.umsa" class="org.umsa.web.operaciones.GetUnidadMedida"/>
+
+  <bean name="/setProveedor.umsa" class="org.umsa.web.generadores.setProveedor"/>
+  <bean name="/GetProveedores.umsa" class="org.umsa.web.generadores.GetProveedores"/>
+  <bean name="/GetDetalleProveedores.umsa" class="org.umsa.web.generadores.GetDetalleProveedores"/>
+  <bean name="/AdjProveedor.umsa" class="org.umsa.web.generadores.AdjProveedor"/>
+  
+  <bean name="/DGeneraOrdenCompra.umsa" class="org.umsa.web.generadores.DataOrdenCompraGenerado">
+      <property name="adqui" ref="adqui"/>
+  </bean>
+  <bean name="/GeneraOrdenCompra.umsa" class="org.umsa.web.generadores.GeneraOrdenCompra">
+      <property name="adqui" ref="adqui"/>
+  </bean>
+   <!-- Marcos -->
+  <bean name="/verEncabezado.umsa" class="org.umsa.web.verEncabezado.VerEncabezado" />
+  
+  <bean name="/verCuerpo.umsa" class="org.umsa.web.verCuerpo.VerCuerpo" />
+
+  <bean name="/verPie.umsa" class="org.springframework.web.servlet.mvc.ParameterizableViewController">
+    <property name="viewName"><value>verPie/VerPie</value></property>
+  </bean>
+  <bean name="/addUnidadMedida.umsa" class="org.umsa.web.operaciones.AddUnidadMedida"/>
+  <!-- =============================== Acciones Item =================== -->
+  <bean name="/buscaItemReal.umsa" class="org.umsa.web.operaciones.item.BuscaItemReal"/>
+  <bean name="/addItem.umsa" class="org.umsa.web.operaciones.item.AddItem"/>
+  <bean name="/addDetalle.umsa" class="org.umsa.web.operaciones.item.AddDetalle"/>
+  <bean name="/delDetalle.umsa" class="org.umsa.web.operaciones.item.DelDetalle"/>
+  <bean name="/updateDetalle.umsa" class="org.umsa.web.operaciones.item.UpdateDetalle"/>
+  <bean name="/delItem.umsa" class="org.umsa.web.operaciones.item.DelItem"/>
+  <bean name="/updateItem.umsa" class="org.umsa.web.operaciones.item.UpdateItem"/>
+  <bean name="/loadDetalle.umsa" class="org.umsa.web.operaciones.item.LoadDetalle"/>
+  <!-- =============================== AQUI VA MENU TUTORIAL =================== -->
+  <bean name="/ver_docu.umsa" class="org.umsa.web.menu_tuto.Ver_Tuto" />
+  
+  <bean name="/ver_tuto.umsa" class="org.umsa.web.menu_tuto.Ver_Tuto" />
+  
+  <bean name="/ver_otro.umsa" class="org.umsa.web.menu_tuto.Ver_Tuto" />
+   <!-- ======================================================================== -->
+   
+   <!-- =============================== MENU INICIO =================== -->
+  <!--bean name="/Inicio.umsa" class="org.umsa.web.inicio.controlador_main">
+      <property name="adqui" ref="adqui"/>
+  </bean-->
+  <bean name="/Busqueda_view.umsa" class="org.umsa.web.inicio.controlador_main">
+      <property name="adqui" ref="adqui"/>
+  </bean>
+  
+  <bean name="/BusquedaT.umsa" class="org.umsa.web.inicio.c_busqueda">
+      <property name="adqui" ref="adqui"/>
+  </bean>
+  <bean name="/adjudicados.umsa" class="org.umsa.web.inicio.c_adjudicados">
+      <property name="adqui" ref="adqui"/>
+  </bean>
+  <bean name="/Proveedores.umsa" class="org.umsa.web.inicio.c_proveedores">
+      <property name="adqui" ref="adqui"/>
+  </bean>
+  <bean name="/Normativa.umsa" class="org.umsa.web.inicio.c_normativa">
+      
+  </bean>
+   <bean name="/Clasificadores.umsa" class="org.umsa.web.inicio.c_clasificador">
+       <property name="adqui" ref="adqui"/>
+   </bean>
+   <bean name="/Informacion.umsa" class="org.umsa.web.inicio.controlador_main">
+        <property name="adqui" ref="adqui"/>
+   </bean>
+   <bean name="/Qsomos.umsa" class="org.umsa.web.inicio.c_qsumsa">
+        <property name="adqui" ref="adqui"/>
+   </bean>
+   <!-- ======================================================================== -->
+  <!-- Conexion -->
+   <bean name="/login.umsa" class="org.umsa.web.verbarra.VerBarraControlador">
+       
+   </bean>
+
+  <bean name="/buscarUsuario.umsa" class="org.umsa.web.login.BuscarConexion">
+    <property name="adqui" ref="adqui"/>
+  </bean>
+
+  <bean name="/login/login.umsa" class="org.springframework.web.servlet.mvc.ParameterizableViewController">
+    <property name="viewName"><value>login/LoginEntrada</value></property>
+  </bean>
+  
+  <bean name="/logout.umsa" class="org.umsa.web.logout.Logout"/>
+
+  <bean name="/menu/MenuPrincipal.umsa" class="org.umsa.web.menu.VeMenu">   
+    <property name="adqui"><ref bean="adqui"/></property>
+  </bean>
+  
+<!-- ==============================================================
+        TRANSACCION DE PEDIDO DE INSUMOS,ACTIVOS y SERVICIOS
+   ============================================================== -->
+
+    <bean name="/TransaccionMateriales.umsa" class="org.umsa.web.transaccionMateriales.TransaccionBandeja">
+        <property name="adqui"><ref bean="adqui"/></property>
+    </bean>
+
+    <bean name="/TransaccionSolicitud.umsa" class="org.umsa.web.transaccionMateriales.TransaccionInicio">
+        <property name="adqui"><ref bean="adqui"/></property>
+    </bean>
+
+    <bean name="/TransaccionGuarda.umsa" class="org.umsa.web.transaccionMateriales.TransaccionGuarda">
+        <property name="adqui"><ref bean="adqui"/></property>
+    </bean>
+
+    <bean name="/TransaccionDetalleItems.umsa" class="org.umsa.web.transaccionMateriales.TransaccionDetalleItems">
+        <property name="adqui"><ref bean="adqui"/></property>
+    </bean>
+
+    <bean name="/TransaccionArticuloGuarda.umsa" class="org.umsa.web.transaccionMateriales.TransaccionArticuloGuarda">
+        <property name="adqui"><ref bean="adqui"/></property>
+    </bean>
+        
+    <bean name="/TransaccionArticuloMostrarElimina.umsa" class="org.umsa.web.transaccionMateriales.TransaccionArticuloMostrarElimina">
+        <property name="adqui"><ref bean="adqui"/></property>
+    </bean>
+    
+    <bean name="/TransaccionArticuloElimina.umsa" class="org.umsa.web.transaccionMateriales.TransaccionArticuloElimina">
+        <property name="adqui"><ref bean="adqui"/></property>
+    </bean>
+
+    <bean name="/TransaccionArticuloComplemento.umsa" class="org.umsa.web.transaccionMateriales.TransaccionComplementoEdita">
+        <property name="adqui"><ref bean="adqui"/></property>
+    </bean>    
+    
+    <bean name="/TransaccionGuardaComplemento.umsa" class="org.umsa.web.transaccionMateriales.TransaccionComplementoGuarda">
+        <property name="adqui"><ref bean="adqui"/></property>
+    </bean>
+    
+    <bean name="/TransaccionEliminaComplemento.umsa" class="org.umsa.web.transaccionMateriales.TransaccionComplementoElimina">
+        <property name="adqui"><ref bean="adqui"/></property>
+    </bean>
+
+    <bean name="/TransaccionItemsAbre.umsa" class="org.umsa.web.transaccionMateriales.TransaccionItemsAbre">
+        <property name="adqui"><ref bean="adqui"/></property>
+    </bean>
+    
+    <bean name="/TransaccionSolicitudAvanza.umsa" class="org.umsa.web.transaccionMateriales.TransaccionSolicitudAvanza">
+        <property name="adqui"><ref bean="adqui"/></property>
+    </bean>        
+    
+    <bean name="/TransaccionListaSolicitudes.umsa" class="org.umsa.web.transaccionMateriales.TransaccionListaSolicitudes">
+        <property name="adqui"><ref bean="adqui"/></property>
+    </bean>
+    
+    <bean name="/TransaccionPedidosLista.umsa" class="org.umsa.web.transaccionMateriales.TransaccionPedidosLista">
+        <property name="adqui"><ref bean="adqui"/></property>
+    </bean>
+    
+    <bean name="/TransaccionPedidos.umsa" class="org.umsa.web.transaccionMateriales.TransaccionPedidoBandeja">
+        <property name="adqui"><ref bean="adqui"/></property>
+    </bean>
+    
+    <bean name="/TransaccionElimina.umsa" class="org.umsa.web.transaccionMateriales.TransaccionElimina">
+        <property name="adqui"><ref bean="adqui"/></property>
+    </bean>
+    
+    <!-- ========================================================================
+                    consultorias 
+         =====================================================================-->
+         
+    <bean name="/TransaccionConsultoriasBandeja.umsa" class="org.umsa.web.transaccionMateriales.TransaccionConsultoresBandeja">
+        <property name="adqui"><ref bean="adqui"/></property>
+    </bean>
+    
+    <bean name="/TransaccionConsultoria.umsa" class="org.umsa.web.transaccionMateriales.TransaccionConsultores">
+        <property name="adqui"><ref bean="adqui"/></property>
+    </bean>
+    
+    <bean name="/TransaccionConsultoresGenera.umsa" class="org.umsa.web.transaccionMateriales.TransaccionConsultoresGenera">
+        <property name="adqui"><ref bean="adqui"/></property>
+    </bean>
+    
+    <bean name="/TransaccionConsultorAdjTerminos.umsa" class="org.umsa.web.transaccionMateriales.FileUploadServlet">
+        <property name="adqui"><ref bean="adqui"/></property>
+    </bean>
+    
+    <bean name="/TransaccionConsultoresDetalle.umsa" class="org.umsa.web.transaccionMateriales.TransaccionConsultoresDetalle">
+        <property name="adqui"><ref bean="adqui"/></property>
+    </bean>
+    
+    <bean name="/TransaccionConsultoresAbre.umsa" class="org.umsa.web.transaccionMateriales.TransaccionConsultoresAbre">
+        <property name="adqui"><ref bean="adqui"/></property>
+    </bean>
+    <!-- ========================================================================
+                    BUSQUEDA
+         =====================================================================-->
+        <bean name="/Busqueda.umsa" class="org.umsa.web.operaciones.Busqueda">
+            <property name="adqui"><ref bean="adqui"/></property>
+        </bean>
+        <bean name="/Rastrear.umsa" class="org.umsa.web.operaciones.Rastrear">
+            <property name="adqui"><ref bean="adqui"/></property>
+        </bean>
+        <bean name="/Archivos.umsa" class="org.umsa.web.operaciones.Archivos">
+            <property name="adqui"><ref bean="adqui"/></property>
+        </bean>
+        <bean name="/Formu.umsa" class="org.umsa.web.operaciones.Formu">
+            <property name="adqui"><ref bean="adqui"/></property>
+        </bean>
+        <bean name="/RastrearDetalle.umsa" class="org.umsa.web.operaciones.RastrearDetalle">
+            <property name="adqui"><ref bean="adqui"/></property>
+        </bean>
+        
+    <!-- ========================================================================
+                    consultorias 
+         =====================================================================-->
+         
+    <bean name="/TransaccionObrasBandeja.umsa" class="org.umsa.web.transaccionMateriales.TransaccionObrasBandeja">
+        <property name="adqui"><ref bean="adqui"/></property>
+    </bean>
+    
+    <bean name="/TransaccionObras.umsa" class="org.umsa.web.transaccionMateriales.TransaccionObras">
+        <property name="adqui"><ref bean="adqui"/></property>
+    </bean>
+        
+    <bean name="/TransaccionObrasAbre.umsa" class="org.umsa.web.transaccionMateriales.TransaccionObrasAbre">
+        <property name="adqui"><ref bean="adqui"/></property>
+    </bean>
+        
+    <bean name="/TransaccionObrasDetalle.umsa" class="org.umsa.web.transaccionMateriales.TransaccionObrasDetalle">
+        <property name="adqui"><ref bean="adqui"/></property>
+    </bean>
+    
+    <bean name="/TransaccionObraAdjTerminos.umsa" class="org.umsa.web.transaccionMateriales.TransaccionObrasAdjTerminos">
+        <property name="adqui"><ref bean="adqui"/></property>
+    </bean>
+        
+    <bean name="/TransaccionObrasGenera.umsa" class="org.umsa.web.transaccionMateriales.TransaccionObrasGenera">
+        <property name="adqui"><ref bean="adqui"/></property>
+    </bean>    
+
+    <bean name="/TransaccionEliminaDoc.umsa" class="org.umsa.web.transaccionMateriales.TransaccionEliminaDoc">
+        <property name="adqui"><ref bean="adqui"/></property>
+    </bean>  
+    
+    <bean name="/BuscarProveedor.umsa" class="org.umsa.web.operaciones.proveedor.BuscarProveedor">
+        <property name="adqui"><ref bean="adqui"/></property>
+    </bean>
+    <bean name="/ProveedorInfo.umsa" class="org.umsa.web.operaciones.proveedor.DetalleProveedor">
+        <property name="adqui"><ref bean="adqui"/></property>
+    </bean>
+    <bean name="/BuscarItems.umsa" class="org.umsa.web.operaciones.item.BuscarItems">
+        <property name="adqui"><ref bean="adqui"/></property>
+    </bean>
+    <bean name="/BuscarAdjudicados.umsa" class="org.umsa.web.operaciones.adjudicados.BuscarAdjudicados">
+        <property name="adqui"><ref bean="adqui"/></property>
+    </bean>
+    
+    <bean name="/detalle_adju.umsa" class="org.umsa.web.operaciones.adjudicados.DetalleAdjudicado">
+        <property name="adqui"><ref bean="adqui"/></property>
+    </bean>
+    
+    
+    <bean name="/GetPartidas.umsa" class="org.umsa.web.operaciones.GetPartidas">
+        <property name="adqui"><ref bean="adqui"/></property>
+    </bean>
+    
+    <bean name="/GetItems.umsa" class="org.umsa.web.operaciones.GetItems">
+        <property name="adqui"><ref bean="adqui"/></property>
+    </bean>
+    <bean name="/GetEnviadosDetalle.umsa" class="org.umsa.web.operaciones.EnviadosDetalle">
+        <property name="adqui"><ref bean="adqui"/></property>
+    </bean>
+    
+    
+    <bean name="/GetPOA.umsa" class="org.umsa.web.operaciones.GetPOA">
+        <property name="adqui"><ref bean="adqui"/></property>
+    </bean>
+    
+    
+    <bean name="/ServCapri.umsa" class="pruebaService.Service1">
+       
+    </bean>
+    
+    
+</beans>

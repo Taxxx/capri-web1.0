@@ -1,0 +1,461 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+<!--
+    Document   : Transaccion.xml
+    Created on : 8 de noviembre de 2010, 14:47
+        Author     : julian
+    Description:
+        Purpose of the document follows.
+-->
+
+<sqlMap namespace="Transaccion">
+    <typeAlias alias="Transaccion" type="org.umsa.domain.Transaccion"/>
+    
+    <select id="RestriccionAdjuntos" resultClass="Transaccion">
+        select t3.COD_ADJUNTO,t3.descripcion
+        from RESTRICCION_ADJUNTOS t1 inner join TRANSACCION t2 on (t1.COD_CUANTIA=t2.COD_CUANTIA and t1.COD_W=t2.COD_W)
+        inner join TIPO_DOC t3 on t1.COD_ADJUNTO=t3.COD_ADJUNTO
+        where t2.COD_TRANSACCION=#cod_transaccion# and t3.COD_ADJUNTO <![CDATA[<> 1]]>
+            MINUS
+        select t3.COD_ADJUNTO,t4.DESCRIPCION
+        from TRANSACCION t1 inner join DOCUMENTOS t2 on t1.COD_TRANSACCION=t2.COD_TRANSACCION and t2.ESTADO='V'
+        inner join RESTRICCION_ADJUNTOS t3 on (t1.COD_CUANTIA=t3.COD_CUANTIA and t1.COD_W=t3.COD_W and t2.COD_ADJUNTO=t3.COD_ADJUNTO)
+        inner join TIPO_DOC t4 on t3.COD_ADJUNTO=t4.COD_ADJUNTO
+        where t1.COD_TRANSACCION=#cod_transaccion#
+    </select>
+    <select id="getTransaccionMateriales" resultClass="Transaccion">      
+        select NVL(t1.cuce,'Sin Generar') as cuce, t1.cod_transaccion,(t2.nro||'-'||t1.gestion) as nro_gestion,t2.nro,t1.gestion,to_char(t1.fecha,'YYYY-MM-DD') as fecha,t2.cod_estado,t2.estado,(SUBSTR(t1.de,1,50) ||'...') as unidad_sol,t1.a,t1.usuario_sol,t1.estado as cod_estado,t1.cod_w,t1.obs,t1.detalle
+        from adquisiciones.transaccion t1 
+        left join (
+            select distinct t3.cod_transaccion,t1.nro,t3.estado as cod_estado,t4.estado from adquisiciones.transaccion_detalle t3 
+            left join adquisiciones.transaccion_detalle_nro t2 on t3.cod_trans_detalle=t2.cod_trans_detalle
+            left join adquisiciones.transaccion_nro t1 on t1.cod_trans_nro= t2.cod_trans_nro 
+            left join adquisiciones.estados t4 on t4.codigo=t3.estado          
+                    ) t2 
+        on t1.cod_transaccion=t2.cod_transaccion 
+        where t1.estado='V' and t1.usuario_reg=#cod_usuario# and t1.gestion=#gestion# and (t2.cod_estado ='B' or t2.cod_estado is null) and t1.cod_w=#cod_w#
+        order by t2.nro DESC        
+    </select>
+    
+    <select id="getTransaccionSolicitudes" resultClass="Transaccion">      
+        select NVL(t1.cuce,'Sin Generar') as cuce, t1.cod_transaccion,(t2.nro||'-'||t1.gestion) as nro_gestion,t2.nro,t1.gestion,to_char(t1.fecha,'YYYY-MM-DD') as fecha,t2.cod_estado,t2.estado,(SUBSTR(t1.de,1,50) ||'...') as unidad_sol,t1.a,t1.usuario_sol,t1.estado as cod_estado,t1.cod_w,t1.obs,t1.detalle
+        from adquisiciones.transaccion t1 
+        left join (
+            select distinct t3.cod_transaccion,t1.nro,t3.estado as cod_estado,t4.estado,t1.cod_tramite from adquisiciones.transaccion_detalle t3 
+            left join adquisiciones.transaccion_detalle_nro t2 on t3.cod_trans_detalle=t2.cod_trans_detalle
+            left join adquisiciones.transaccion_nro t1 on t1.cod_trans_nro= t2.cod_trans_nro 
+            left join adquisiciones.estados t4 on t4.codigo=t3.estado            
+                    ) t2 
+        on t1.cod_transaccion=t2.cod_transaccion 
+        where t1.estado='V' and t1.usuario_reg=#cod_usuario# and t1.gestion=#gestion# and (t2.cod_estado ='B' or t2.cod_estado is null) and (t1.cod_w=1 or t1.cod_w=3 or t1.cod_w=4 or t1.cod_w=5 or t1.cod_w=6 or t1.cod_w=7)
+        order by t1.cuce DESC        
+    </select>
+   
+    <resultMap id="DatosProgApert" class="org.umsa.domain.Transaccion">
+        <result property="apert_prog"   column="detalle" />
+    </resultMap>
+    <select id="getUnidadEjecutora" resultMap="DatosProgApert">
+        SELECT distinct (t2.apertura||' - '|| t2.detalle) as detalle
+        FROM adquisiciones.adm_usr_apert t1 
+        inner join adquisiciones.programatic_apert t2 on t1.cod_apert = t2.cod_apert
+        WHERE t1.cod_usuario=#id_usuario#
+    </select>
+    
+    <select id="getNroTransaccion" resultClass="java.lang.Integer">
+        select (CASE WHEN MAX(t1.nro_transaccion) is not null THEN MAX(t1.nro_transaccion) ELSE 0 END )as nro
+        from adquisiciones.transaccion t1
+        where t1.cod_almacen=#cod_almacen# and t1.gestion=#gestion#
+    </select>
+    
+    <select id="getNroTramite" resultClass="java.lang.Integer">
+        select (CASE WHEN MAX(t2.nro) is not null THEN MAX(t2.nro) ELSE 0 END )as nro
+        from adquisiciones.transaccion t1 inner join adquisiciones.transaccion_nro t2 on t1.cod_transaccion=t2.cod_transaccion        
+        where t2.cod_tramite=#cod_tramite# and t1.gestion=#gestion# and t1.cod_almacen=#cod_almacen#        
+    </select>
+    
+    <select id="getCodAlmacen" resultClass="java.lang.Integer">
+        select t1.COD_ALMACEN from transaccion t1 where t1.COD_TRANSACCION=#value#    
+    </select>
+  
+    <select id="getCodTransaccionNro" resultClass="java.lang.Integer">
+        <!--select (CASE WHEN MAX(t2.nro) is not null THEN MAX(t2.nro) ELSE 0 END )as nro
+        from adquisiciones.transaccion t1 inner join adquisiciones.transaccion_nro t2 on t1.cod_transaccion=t2.cod_transaccion        
+        where t2.cod_tramite=#cod_tramite# and t1.gestion=#gestion# and t1.cod_almacen=#cod_almacen#        
+        -->
+        select t1.cod_trans_nro from adquisiciones.transaccion_nro t1 where t1.cod_transaccion=#cod_transaccion# and T1.COD_TRAMITE=#cod_tramite#
+    </select>
+  
+    <insert id="setTransaccion">
+        insert into adquisiciones.transaccion(cod_transaccion,cod_cuantia,nro_transaccion,GESTION,FECHA,DE,A,USUARIO_SOL,USUARIO_REG,INGRESO_MATERIAL,COD_W,COD_ALMACEN,DETALLE,TIPO_SOL,USER_MAKER)
+        values (ADQUISICIONES.SEC_COD_TRANSACCION.NEXTVAL,#cod_cuantia#,#nro_transaccion#,#gestion#,sysdate,#unidad_sol#,#unidad_des#,#usuario_sol#,#usr_reg#,#ingreso_material#,#cod_w#,#cod_almacen#,#detalle#,#tipo_sol#,#user_maker#)
+    </insert>
+    
+    <select id="getCodTransaccion" resultClass="java.lang.Integer">
+        SELECT ADQUISICIONES.SEC_COD_TRANSACCION.CURRVAL as cod_tran FROM DUAL
+    </select>
+
+    <insert id="setTramiteNro">
+        insert into adquisiciones.transaccion_nro(cod_trans_nro,cod_transaccion,cod_tramite,nro,fecha)
+        values (ADQUISICIONES.SEC_COD_TRANS_NRO.NEXTVAL,#cod_transaccion#,#cod_tramite#,#nro#,sysdate)
+    </insert>
+    
+    <select id="getCuantia" resultClass="Transaccion">
+        select cod_cuantia,(cuantia ||' de '||del ||' a '|| hasta ||' Bs.' ) as cuantia ,del,hasta from adquisiciones.cuantia order by cod_cuantia                   
+    </select>    
+
+    <select id="getTransaccionMaterial" resultClass="Transaccion">
+        select t1.cod_transaccion, t1.gestion as nro_gestion,t2.nro,t1.gestion,to_char(t1.fecha,'YYYY-MM-DD') as fecha,t1.de as unidad_sol,t1.a as unidad_des,t1.usuario_sol,t1.detalle,t3.cuantia
+        from adquisiciones.transaccion t1  
+        left join (select distinct t1.cod_transaccion,t1.nro from adquisiciones.transaccion_nro t1 where t1.cod_tramite=#cod_tramite# ) t2
+        on  t1.cod_transaccion =t2.cod_transaccion
+        inner join adquisiciones.cuantia t3 on t3.cod_cuantia=t1.cod_cuantia
+        where t1.cod_transaccion=#cod_transaccion#
+        and t1.cod_almacen=#cod_almacen#                
+    </select>    
+
+    <select id="getTransaccionComplemento" resultClass="Transaccion">
+        select t1.cod_complemento,t1.detalle_solicitud as detalle
+        from adquisiciones.transaccion_det_complemento t1 
+        where t1.cod_trans_detalle=#value#
+    </select>
+
+    <delete id ="setTransaccionEliminaComplemento">
+        delete from adquisiciones.transaccion_det_complemento
+        where cod_complemento=#value#
+    </delete>    
+  
+    <insert id="setTransaccionComplemento">
+        insert into adquisiciones.transaccion_det_complemento(cod_complemento,cod_trans_detalle,detalle_solicitud)
+        values (ADQUISICIONES.SEC_cod_complemento.NEXTVAL,#cod_trans_detalle#,#detalle#)
+    </insert>    
+        
+    <delete id="setTransaccionArticuloElimina">      
+      delete from adquisiciones.transaccion_detalle where cod_trans_detalle=#cod_trans_detalle#
+    </delete>
+    
+    <delete id="delTransaccionEliminaDocs">      
+      delete from adquisiciones.documentos where cod_transaccion=#value#
+    </delete>
+    
+    <delete id ="setTransaccionEliminaComplementoArticulos">
+      delete from adquisiciones.transaccion_det_complemento
+      where cod_trans_detalle=#cod_trans_detalle#
+    </delete>
+    
+    <delete id ="setTransaccionEliminaRegistroFechaArticulos">
+        delete from adquisiciones.transaccion_envio_fecha
+        where cod_trans_detalle=#cod_trans_detalle#
+    </delete>
+    
+    <delete id ="setTransaccionEliminaDetalleNroArticulos">
+        delete from adquisiciones.transaccion_detalle_nro
+        where cod_trans_detalle=#cod_trans_detalle#
+    </delete>    
+
+    <select id="getTransaccionListaSolicitudes" resultClass="Transaccion">      
+        <!--select t1.cod_transaccion,(t2.nro||'-'||t1.gestion) as nro_gestion,t2.nro,t1.gestion,(CASE WHEN t2.cod_estado is not null THEN t2.cod_estado ELSE 'B' END ) as cod_estado,(SUBSTR(t1.de,1,50) ||'...') as unidad_sol,(SUBSTR(t1.a,1,50) ||'...') as unidad_des,t1.usuario_sol,t1.detalle
+        from adquisiciones.transaccion t1 
+        left join (                    
+            select distinct t3.cod_transaccion,t1.nro,t5.estado as cod_estado from adquisiciones.transaccion_detalle t3 
+            left join adquisiciones.transaccion_detalle_nro t2 on t3.cod_trans_detalle=t2.cod_trans_detalle
+            left join adquisiciones.transaccion_nro t1 on t1.cod_trans_nro= t2.cod_trans_nro
+            left join adquisiciones.transaccion_envio_fecha t5 on t5.cod_trans_detalle=t3.cod_trans_detalle 
+            left join adquisiciones.estados t4 on t4.codigo=t5.estado            
+            where t1.cod_tramite=#cod_tramite# AND t5.estado='PPTO'
+                    ) t2 
+        on t1.cod_transaccion=t2.cod_transaccion 
+        where t1.usuario_reg=#cod_usuario# and t1.gestion=#gestion#
+        order by t2.nro DESC-->
+        select distinct t1.cod_transaccion,t3.cod_trans_nro,(t2.nro||'-'||t1.gestion) as nro_gestion,t2.nro,t1.gestion,(CASE WHEN t2.cod_estado is not null THEN t2.cod_estado ELSE 'B' END ) as cod_estado,t1.usuario_sol,t1.detalle,t3.nro as nro_orden,t1.tipo_sol
+        from adquisiciones.transaccion t1 
+        left join (                    
+            select distinct t3.cod_transaccion,t1.cod_trans_nro,t1.nro,t5.estado as cod_estado from adquisiciones.transaccion_detalle t3 
+            left join adquisiciones.transaccion_detalle_nro t2 on t3.cod_trans_detalle=t2.cod_trans_detalle
+            left join adquisiciones.transaccion_nro t1 on t1.cod_trans_nro= t2.cod_trans_nro
+            left join adquisiciones.transaccion_envio_fecha t5 on t5.cod_trans_detalle=t3.cod_trans_detalle 
+            left join adquisiciones.estados t4 on t4.codigo=t5.estado            
+            where t1.cod_tramite=1 AND t5.estado='PPTO'
+                    ) t2 
+        on t1.cod_transaccion=t2.cod_transaccion
+        left join (
+             select distinct t1.cod_trans_nro,t1.cod_trans_nro_ant,t3.cod_transaccion,t1.nro from adquisiciones.transaccion_detalle t3 
+            left join adquisiciones.transaccion_detalle_nro t2 on t3.cod_trans_detalle=t2.cod_trans_detalle
+            left join adquisiciones.transaccion_nro t1 on t1.cod_trans_nro= t2.cod_trans_nro
+            left join adquisiciones.transaccion_envio_fecha t5 on t5.cod_trans_detalle=t3.cod_trans_detalle                         
+            where t1.cod_tramite=2 AND (t5.estado='ALM1' or t5.estado='JUR')
+                    ) t3         
+        on t1.cod_transaccion=t3.cod_transaccion       
+        where t1.usuario_reg=#cod_usuario# and t1.gestion=#gestion# and t1.estado='V' and cod_w!=2
+        order by cod_transaccion DESC
+    </select>
+    
+    <select id="getTransaccionListaPedidos" resultClass="Transaccion">      
+        select t1.cod_trans_nro,t1.cod_tramite,t1.nro as nro_pedido,t2.usuario_sol,t2.detalle 
+        from adquisiciones.transaccion_nro t1
+        inner join adquisiciones.transaccion t2 on t1.cod_transaccion=t2.cod_transaccion
+        where t1.cod_tramite=#cod_tramite# and t2.usuario_reg=#cod_usuario# and t2.gestion=#gestion#  and t2.estado='V' 
+        order by cod_trans_nro DESC
+    </select>
+        
+    <select id="getTransaccionDestino" resultClass="java.lang.String">
+        select t1.destino from adquisiciones.adm_workflow_estados t1 
+        where t1.cod_w=#cod_w# and origen=#origen#
+    </select>
+    
+    <select id="getNroTransDetNro" resultClass="java.lang.Integer">
+        select count(t1.cod_trans_detalle) as cantidad from adquisiciones.transaccion_detalle_nro t1 
+        inner join adquisiciones.transaccion_nro t2 on t1.cod_trans_nro=t2.cod_trans_nro 
+        where t2.cod_tramite=#cod_tramite# and t2.cod_transaccion=#cod_transaccion#      
+    </select>
+    
+    <insert id="setTransaccionDetalleNro">
+        insert into adquisiciones.transaccion_detalle_nro(cod_trans_detalle,cod_trans_nro)
+        select t1.cod_trans_detalle,#cod_trans_nro# from adquisiciones.transaccion_detalle t1 where t1.cod_transaccion=#cod_transaccion#
+    </insert>
+    <insert id="addTransDetalle">
+        insert into adquisiciones.transaccion_detalle(cod_trans_detalle,cod_transaccion,gestion,cantidad_pedido,cod_unidad_medida,detalle)
+        values (ADQUISICIONES.SEC_COD_TRANS_DETALLE.NEXTVAL,#cod_transaccion#,#gestion#,#cantidad#,#unidad_medida#,#articulo#)
+    </insert>  
+    
+    <insert id="setTransaccionAvanza">
+        update adquisiciones.transaccion_detalle
+        set estado=#destino#
+        where cod_transaccion=#cod_transaccion#
+    </insert>  
+    
+    <insert id="setTransaccionLimpiaObs">
+        update adquisiciones.transaccion
+        set obs=''
+        where cod_transaccion=#cod_transaccion#
+    </insert>  
+    
+    <select id="getTransaccionNroItems" resultClass="java.lang.Integer">
+         SELECT count(cod_transaccion) as nro from adquisiciones.transaccion_detalle where cod_transaccion=#value#        
+    </select>
+    
+    <insert id="setEliminaTransaccion">
+        update adquisiciones.transaccion
+        set estado='X'
+        where cod_transaccion=#value#
+    </insert>  
+    
+    <!--==================================================================================
+                                    CONSULTORES
+    ===================================================================================-->
+    
+    <select id="getTransaccionConsultores" resultClass="Transaccion">      
+        select NVL(t1.cuce,'Sin Generar') as cuce, t1.cod_transaccion,(t2.nro||'-'||t1.gestion) as nro_gestion,t2.nro,t1.gestion,to_char(t1.fecha,'YYYY-MM-DD') as fecha,t2.cod_estado,t2.estado,(SUBSTR(t1.de,1,50) ||'...') as unidad_sol,t1.a,t1.usuario_sol,t1.estado as cod_estado,t1.cod_w,t1.obs,t1.detalle
+        from adquisiciones.transaccion t1 
+        left join (                    
+            select distinct t3.cod_transaccion,t1.nro,t3.estado as cod_estado,t4.estado from adquisiciones.transaccion_detalle t3 
+            left join adquisiciones.transaccion_detalle_nro t2 on t3.cod_trans_detalle=t2.cod_trans_detalle
+            left join adquisiciones.transaccion_nro t1 on t1.cod_trans_nro= t2.cod_trans_nro 
+            left join adquisiciones.estados t4 on t4.codigo=t3.estado            
+                    ) t2 
+        on t1.cod_transaccion=t2.cod_transaccion 
+        where t1.estado='V' and t1.usuario_reg=#cod_usuario# and t1.gestion=#gestion# and t1.cod_w=#cod_w# and (t2.cod_estado ='B' or t2.cod_estado is null)
+        order by t2.nro DESC        
+    </select>
+    
+    <insert id="setTransaccionTerminos">
+        insert into adquisiciones.documentos(cod_docs,cod_transaccion,terminos_ref, ubicacion,descripcion,estado, cod_adjunto)
+        values (ADQUISICIONES.SEC_COD_docs.NEXTVAL,#cod_transaccion#,#terminos_ref#, #ubicacion#,#descripcion#,#estado#, #cod_adjunto#)
+    </insert>  
+    
+    <delete id="delTransaccionTerminos">
+        <!--
+        delete from adquisiciones.documentos where cod_docs=#value# 
+        -->
+        UPDATE adquisiciones.documentos
+        SET estado = 'X'
+        where cod_docs=#value#
+    </delete>
+    
+    
+    <!-- BUSCADOR-->
+    
+    <select id="busqueda" resultClass="Transaccion">
+        
+        <!--and t1.COD_CUANTIA=#cuantia# and UPPER(t1.DETALLE) like UPPER('%'||#detalle#||'%') and #detalle# is not null and t1.CUCE like #cuce#||'%'-->
+                     
+        SELECT cod_transaccion, fecha,tipo_pedido, NVL(origen,'Sin Datos') as origen , NVL(destino, 'Sin Datos') as destino, cuantia, detalle_solicitud, estado, cuce, total_filas
+        FROM (
+            SELECT cod_transaccion, fecha,tipo_pedido, origen , destino, cuantia, detalle_solicitud, estado, cuce, total_filas, ROWNUM numfila
+            FROM (
+                <!--select  t1.COD_TRANSACCION, t3.DETALLE as tipo_pedido, GET_NOMBRE_UNIDAD(t1.DE, t1.GESTION) as origen, GET_NOMBRE_UNIDAD(t1.A, t1.GESTION) as destino, t2.CUANTIA, t1.DETALLE as detalle_solicitud, t4.ESTADO, t1.CUCE as cuce, COUNT(t1.CUCE) OVER () as total_filas-->
+                select  t1.COD_TRANSACCION, t1.fecha,t3.DETALLE as tipo_pedido, t1.DE as origen, t1.A as destino, t2.CUANTIA, t1.DETALLE as detalle_solicitud, t4.ESTADO, t1.CUCE as cuce, COUNT(t1.CUCE) OVER () as total_filas
+                from adquisiciones.transaccion t1 
+                inner join CUANTIA t2 on t1.COD_CUANTIA=t2.COD_CUANTIA
+                inner join ADM_WORKFLOW t3 on t1.COD_W=t3.COD_W
+                inner join ESTADOS t4 on t1.ESTADO=t4.CODIGO
+                inner join(SELECT * FROM TABLE(GET_ESTADO_TRANSACCION(#ver#))) t5 on t1.COD_TRANSACCION=t5.COD
+                where TO_CHAR(t1.fecha,'YYYY') = #gestion# and t1.COD_W like #tipo_item# and t1.COD_CUANTIA like #tipo_cuantia# and UPPER(t1.DETALLE) like UPPER('%'||#detalle#||'%') and t1.CUCE like '%'||#cuce#||'%'
+                ORDER BY t1.COD_TRANSACCION DESC
+            )
+        ) WHERE numfila BETWEEN #min# AND #max#
+        
+        <!---
+        SELECT cod_transaccion, tipo_pedido, NVL(origen,'Sin Datos') as origen, NVL(destino, 'Sin Datos') as destino, cuantia, detalle_solicitud, estado, cuce, total_filas
+        FROM (
+            SELECT cod_transaccion, tipo_pedido, origen , destino, cuantia, detalle_solicitud, estado, cuce, total_filas, ROWNUM numfila
+            FROM (
+                select  t1.COD_TRANSACCION, t3.DETALLE as tipo_pedido, GET_NOMBRE_UNIDAD(t1.DE, t1.GESTION) as origen, GET_NOMBRE_UNIDAD(t1.A, t1.GESTION) as destino, t2.CUANTIA, t1.DETALLE as detalle_solicitud, t4.ESTADO, t1.CUCE as cuce, COUNT(t1.CUCE) OVER () as total_filas
+                from adquisiciones.transaccion t1 
+                inner join CUANTIA t2 on t1.COD_CUANTIA=t2.COD_CUANTIA
+                inner join ADM_WORKFLOW t3 on t1.COD_W=t3.COD_W
+                inner join ESTADOS t4 on t1.ESTADO=t4.CODIGO
+                inner join(SELECT * FROM TABLE(GET_ESTADO_TRANSACCION(1))) t5 on t1.COD_TRANSACCION=t5.COD
+                where t1.COD_W like '%' and t1.COD_CUANTIA like '%' and UPPER(t1.DETALLE) like UPPER('%'||'%'||'%') and t1.CUCE like '%'||'%'||'%'
+                ORDER BY t1.COD_TRANSACCION
+            )
+        ) WHERE numfila BETWEEN 0 AND 50
+        -->
+        <!--
+        select  t1.COD_TRANSACCION, t3.DETALLE as tipo_pedido, GET_NOMBRE_UNIDAD(t1.DE, t1.GESTION) as origen, GET_NOMBRE_UNIDAD(t1.A, t1.GESTION) as destino, t2.CUANTIA, t1.DETALLE as detalle_solicitud, t4.ESTADO, t1.CUCE as cuce, COUNT(t1.CUCE) OVER () as total_filas
+        from adquisiciones.transaccion t1 
+        inner join CUANTIA t2 on t1.COD_CUANTIA=t2.COD_CUANTIA
+        inner join ADM_WORKFLOW t3 on t1.COD_W=t3.COD_W
+        inner join ESTADOS t4 on t1.ESTADO=t4.CODIGO
+        -->
+    </select>
+    <select id="rastreo" resultClass="Transaccion">      
+       <!--
+        select t1.cuce, t5.ARTICULO,t6.DETALLE , t4.ESTADO, t2.COD_TRANS_DETALLE
+        from transaccion t1 inner join transaccion_detalle t2 on t1.COD_TRANSACCION=t2.COD_TRANSACCION
+        inner join adm_usuario t3 on t1.USUARIO_REG=t3.COD_USUARIO
+        inner join ESTADOS t4 on t2.ESTADO=t4.CODIGO
+        inner join clasificador_item t5 on t2.cod_item=t5.cod_item
+        inner join TIPO_ITEM t6 on t5.COD_TIPO_ITEM=t6.COD_TIPO_ITEM
+        where t1.COD_TRANSACCION = #cod_transaccion# 
+        -->
+        select t1.cuce, NVL(t1.detalle,'No tiene') as ARTICULO, t4.ESTADO, t2.COD_TRANS_DETALLE
+        from transaccion t1 inner join transaccion_detalle t2 on t1.COD_TRANSACCION=t2.COD_TRANSACCION
+        inner join adm_usuario t3 on t1.USUARIO_REG=t3.COD_USUARIO
+        inner join ESTADOS t4 on t2.ESTADO=t4.CODIGO
+        where t1.COD_TRANSACCION = #cod_transaccion#
+    </select>
+    <select id="archivos" resultClass="Transaccion">      
+        select t1.TERMINOS_REF as terminos_ref
+        from DOCUMENTOS t1
+        where t1.COD_TRANSACCION=#cod_transaccion#     
+    </select>
+    <select id="formu" resultClass="Transaccion">      
+        select DISTINCT  t2.COD_TRANS_NRO, t3.COD_W
+        from TRANSACCION_DETALLE t1 inner join TRANSACCION_NRO t2 on t1.COD_TRANSACCION=t2.COD_TRANSACCION
+        inner join TRANSACCION t3 on t1.COD_TRANSACCION=t3.COD_TRANSACCION
+        inner join(
+        
+        select distinct t1.cod_trans_nro,t1.cod_trans_nro_ant,t3.cod_transaccion,t1.nro from adquisiciones.transaccion_detalle t3 
+            left join adquisiciones.transaccion_detalle_nro t2 on t3.cod_trans_detalle=t2.cod_trans_detalle
+            left join adquisiciones.transaccion_nro t1 on t1.cod_trans_nro= t2.cod_trans_nro
+            left join adquisiciones.transaccion_envio_fecha t5 on t5.cod_trans_detalle=t3.cod_trans_detalle                         
+            where t1.cod_tramite=2 AND (t5.estado='ALM1' or t5.estado='JUR')
+        
+        )t4 on (t1.COD_TRANSACCION=t4.COD_TRANSACCION and t4.COD_TRANSACCION=#cod_transaccion#)
+        where t1.COD_TRANSACCION=#cod_transaccion# and (t1.ESTADO = 'ALM1' or t1.ESTADO = 'C') and t2.COD_TRAMITE=2     
+    </select>
+    <select id="formuSol" resultClass="Transaccion">      
+        select distinct t3.cod_transaccion from adquisiciones.transaccion_detalle t3 
+            left join adquisiciones.transaccion_detalle_nro t2 on t3.cod_trans_detalle=t2.cod_trans_detalle
+            left join adquisiciones.transaccion_nro t1 on t1.cod_trans_nro= t2.cod_trans_nro
+            left join adquisiciones.transaccion_envio_fecha t5 on t5.cod_trans_detalle=t3.cod_trans_detalle 
+            left join adquisiciones.estados t4 on t4.codigo=t5.estado            
+            where t1.cod_tramite=1 AND t5.estado='PPTO' and t3.COD_TRANSACCION=#cod_transaccion#
+       <!-- 
+        select ESTADO from ESTADOS where CODIGO='UMSA'
+        -->         
+    </select>
+    <select id="getCodUmsa" resultClass="java.lang.String">      
+        select ESTADO from ESTADOS where CODIGO='UMSA'     
+    </select>
+    <select id="getMaxNroTramite" resultClass="java.lang.String">      
+        select (CASE WHEN MAX(t2.nro) is not null THEN MAX(t2.nro) ELSE 0 END )as nro 
+        from adquisiciones.transaccion t1 inner join adquisiciones.transaccion_nro t2 on t1.cod_transaccion=t2.cod_transaccion
+        where t2.cod_tramite=#cod_tramite# and t1.gestion=#gestion# and t1.cod_almacen=#cod_almacen#
+    </select>
+     <!--select id="getMaxCodTransNro" resultClass="java.lang.String">      
+        select (CASE WHEN MAX(t2.nro) is not null THEN MAX(t2.nro) ELSE 0 END )as nro 
+        from adquisiciones.transaccion t1 inner join adquisiciones.transaccion_nro t2 on t1.cod_transaccion=t2.cod_transaccion
+        where t2.cod_tramite=#cod_tramite# and t1.gestion=#gestion# and t1.cod_almacen=#cod_almacen#
+    </select-->
+    <select id="getMaxCodTram" resultClass="java.lang.Integer">
+        SELECT MAX(COD_DOCS) as max_cod
+        from DOCUMENTOS        
+    </select>
+    <select id="rastreoDetalle" resultClass="Transaccion">      
+        select t2.ESTADO, t1.FECHA_ENVIO
+        from TRANSACCION_ENVIO_FECHA t1 inner join ESTADOS t2 on t1.ESTADO=t2.CODIGO
+        where t1.COD_TRANS_DETALLE=#cod_trans_detalle#
+        ORDER BY t1.FECHA_ENVIO   
+    </select>
+    <select id="getEnviados" resultClass="Transaccion">    
+        <!--
+        select distinct t1.cuce, t1.FECHA, t1.DETALLE, t1.USUARIO_SOL
+        from transaccion t1 inner join transaccion_detalle t2 on t1.COD_TRANSACCION=t2.COD_TRANSACCION
+        inner join adm_usuario t3 on t1.USUARIO_REG=t3.COD_USUARIO
+        inner join ESTADOS t4 on t2.ESTADO=t4.CODIGO
+        where t1.COD_W = #cod_w# and t2.ESTADO NOT LIKE 'B' and t3.COD_USUARIO =#cod_usuario#
+        order by t1.fecha 
+        -->
+        select distinct t1.cuce, t1.FECHA, t1.DETALLE, t1.USUARIO_SOL
+        from transaccion t1 inner join transaccion_detalle t2 on t1.COD_TRANSACCION=t2.COD_TRANSACCION
+        inner join adm_usuario t3 on t1.USUARIO_REG=t3.COD_USUARIO
+        inner join ESTADOS t4 on t2.ESTADO=t4.CODIGO
+        where t1.COD_W = #cod_w# and t2.ESTADO NOT LIKE 'B' and t3.COD_USUARIO =#cod_usuario#
+        order by t1.fecha 
+    </select>
+    <select id="getEnviados2" resultClass="Transaccion">
+        <!--    
+        select distinct t1.COD_TRANSACCION, NVL(t1.cuce,'Sin Asignar') as cuce, t1.FECHA, t1.DETALLE, t1.USUARIO_SOL,t1.tipo_sol,t5.COD_TRANS_NRO
+        from transaccion t1 inner join transaccion_detalle t2 on t1.COD_TRANSACCION=t2.COD_TRANSACCION
+        inner join adm_usuario t3 on t1.USUARIO_REG=t3.COD_USUARIO
+        inner join ESTADOS t4 on t2.ESTADO=t4.CODIGO
+        inner join transaccion_nro t5 on t1.COD_TRANSACCION=t5.COD_TRANSACCION and t5.COD_TRAMITE=1
+        where TO_CHAR(t1.fecha,'YYYY') = #gestion# and (t1.COD_W = 1 or t1.COD_W = 6 or t1.COD_W = 7) and t2.ESTADO NOT LIKE 'B' and t3.COD_USUARIO =#cod_usuario#
+        order by t1.fecha DESC
+        -->
+        select distinct t1.COD_TRANSACCION, NVL(t1.cuce,'Sin Asignar') as cuce, t1.FECHA, t1.DETALLE, t1.USUARIO_SOL,t1.tipo_sol,t5.COD_TRANS_NRO,t5.nro as nro_sol_comp
+        from transaccion t1 inner join transaccion_detalle t2 on t1.COD_TRANSACCION=t2.COD_TRANSACCION
+        inner join adm_usuario t3 on t1.USUARIO_REG=t3.COD_USUARIO
+        inner join ESTADOS t4 on t2.ESTADO=t4.CODIGO
+        inner join transaccion_nro t5 on t1.COD_TRANSACCION=t5.COD_TRANSACCION and t5.COD_TRAMITE=1
+        where TO_CHAR(t1.fecha,'YYYY') = #gestion#  and t2.ESTADO NOT LIKE 'B' and t3.COD_USUARIO =#cod_usuario#
+        order by t1.fecha DESC
+    </select>
+    <select id="getEnviadosDetalle" resultClass="Transaccion">
+        select t1.cuce, t1.detalle as ARTICULO, t4.ESTADO
+        from transaccion t1 inner join transaccion_detalle t2 on t1.COD_TRANSACCION=t2.COD_TRANSACCION
+        inner join adm_usuario t3 on t1.USUARIO_REG=t3.COD_USUARIO
+        inner join ESTADOS t4 on t2.ESTADO=t4.CODIGO
+        where t1.COD_TRANSACCION = #cod_transaccion#
+    </select>   
+    <!---
+    <select id="GetEnviados" resultClass="Transaccion">
+        SELECT t1.NOMBRE_RESUMEN, t2.CUCE, t3.ESTADO 
+        FROM ADM_USUARIO t1 inner join TRANSACCION t2 on t1.COD_USUARIO=t2.USUARIO_REG
+        inner join TRANSACCION_DETALLE t3 on t2.COD_TRANSACCION=t3.COD_TRANSACCION
+        WHERE t1.COD_USUARIO = 2 and t3.ESTADO <> 'B' and t2.COD_W = 1
+    </select>  
+    -->
+    <select id="getAperturaPadre" resultClass="java.lang.String">
+        select t2.COD_APERT
+        from ADM_USUARIO t1 inner join adm_usr_apert t2 on t1.COD_USUARIO=t2.COD_USUARIO and t2.PADRE='V' and t1.COD_USUARIO=#cod_usuario#
+    </select>
+    <!-- To call stored procedure. -->
+    <procedure id="generaCUCE" >
+       { call GENERA_CUCE( #value# ) } 
+    </procedure>
+    <!--procedure id="nroSOLICITUD">
+        {call NRO_SOLICITUD}
+    </procedure-->
+    <insert id="nroSolicitud">
+        update adquisiciones.transaccion_nro
+        set nro=#nro#
+        where cod_transaccion=#cod_transaccion#
+    </insert>
+    <insert id="addNroPedido">
+        update adquisiciones.transaccion_nro
+        set nro=#nro#
+        where cod_transaccion=#cod_transaccion# and cod_tramite=4 
+    </insert>
+</sqlMap>

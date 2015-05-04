@@ -1,0 +1,11 @@
+1. exportar al ORACLE_SID=BASE_DATOS.
+2. crear la carpeta /u01/oracle/admin/BASE_DATOS
+3. crear la carpeta /u01/oracle/admin/BASE_DATOS/create
+4. copiar el archivo CreateDB.sql y CreateDBCatalog.sql a la cartepa del punto 3.
+5. crear la carpeta /u01/oracle/admin/BASE_DATOS/pfile
+6. copiar el archivo spfileBASE_DATOS.ora a la cartepa del punto 5.
+7. copiar y renombrar el archivo spfileBASE_DATOS.ora  por initBASE_DATOS.ora a la carpeta /u01/oracle/product/10.1.2/dbs
+8. ejecutar CreaBASEDATOS.sh como usuario oracle
+9. ejecutar SQL> @/direccion/create/tblsp_BASEDATOS.sql
+10. ejecutar SQL> @/direccion/create/usuario_BASEDATOS.sql
+11.ejecutar SQL> @/direccion/create/db_DASEDATOS.sql

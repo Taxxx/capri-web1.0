@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+
+<sqlMap namespace="Proveedor">
+    
+    <typeAlias alias="Proveedor" type="org.umsa.domain.Proveedor"/>
+    <select id="BuscaProveedor" resultClass="Proveedor">      
+        SELECT documento, tipo_id, descripcion , clase_beneficiario, nombre, nombre_comercial, total_filas
+        FROM (
+            SELECT documento, tipo_id, descripcion , clase_beneficiario, nombre, nombre_comercial, total_filas, ROWNUM numfila
+            FROM (
+                SELECT t1.documento, t1.tipo_id, t2.DESCRIPCION, t3.DESCRIPCION as clase_beneficiario, NVL(t1.nombre, 'Sin Nombre') as nombre, NVL(t1.nombre_comercial, 'Sin Nombre Comercial') as nombre_comercial, COUNT(t1.tipo_id) OVER () as total_filas
+                FROM PROVEEDOR t1 inner join TIPO_DOCUMENTO t2 on t1.TIPO_ID=t2.TIPO_ID inner join CLASE_BENEFICIARIO t3 on t1.CLASE_BENEFICIARIO=t3.CLASE_BENEFICIARIO
+                <!--WHERE tipo_id=#tipo_id#-->
+                WHERE t1.tipo_id like #tipo_id# and t1.clase_beneficiario like #clase_beneficiario# and t1.documento like #documento# and UPPER(NVL(t1.nombre,'%')) like UPPER('%'||#nombre#||'%') and UPPER(NVL(t1.nombre_comercial,'%')) like UPPER('%'||#nombre_comercial#||'%')
+                <!--WHERE tipo_id like #tipo_id# and documento like #documento# and UPPER(NVL(nombre, '%')) like UPPER('%'||#nombre#||'%') and UPPER(NVL(nombre_comercial, '%')) like UPPER('%'||#nombre_comercial#||'%')-->
+                ORDER BY t1.documento
+            )
+        ) WHERE numfila BETWEEN #min# AND #max# 
+    </select>
+    <select id="ProveedorInfo" resultClass="Proveedor">
+        select adh_nombre, adh_tipo_id, adh_documento, (dir_pais||' - '||dir_ciudad) as dir_lugar, NVL(dir_direccion,'Sin Datos') as dir_direccion, NVL(dir_telefono,'Sin Datos') as dir_telefono, NVL(dir_email, 'Sin Datos') as dir_email
+        from PROVEEDOR t1
+        where t1.DOCUMENTO like #documento# and t1.TIPO_ID like #tipo_id#
+    </select>  
+</sqlMap>

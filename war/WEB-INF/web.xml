@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE web-app PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN" "http://java.sun.com/dtd/web-app_2_3.dtd">
+<web-app>
+<!--<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="3.0" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
+-->
+
+    <context-param>
+        <param-name>webAppRootKey</param-name>
+        <param-value>adqui.root</param-value>
+    </context-param>
+
+    <!--
+    - Location of the Log4J config file, for initialization and refresh checks.
+    - Applied by Log4jConfigListener.
+    -->
+    <context-param>
+        <param-name>log4jConfigLocation</param-name>
+        <param-value>/WEB-INF/log4j.properties</param-value>
+    </context-param>
+  
+    <!--
+    - Location of the XML file that defines the root application context.
+    - Applied by ContextLoaderServlet.
+    -
+    - Can include "/WEB-INF/dataAccessContext-local.xml" for a single-database
+    - context, or "/WEB-INF/dataAccessContext-jta.xml" for a two-database context.
+    -->
+  <context-param>
+    <param-name>contextConfigLocation</param-name>
+    <param-value>
+      /WEB-INF/dataAccessContext-local.xml  /WEB-INF/applicationContext.xml
+    </param-value>
+    <!--
+    <param-value>
+      /WEB-INF/dataAccessContext-jta.xml  /WEB-INF/applicationContext.xml
+    </param-value>
+    -->
+  </context-param>
+  
+  <!--
+    <listener>
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>-->
+    
+    
+      <!--
+    - Loads the root application context of this web app at startup,
+    - by default from "/WEB-INF/applicationContext.xml".
+    - Note that it is preferable to use ContextLoaderListener in a servlet container
+    - that follows the Servlet 2.4 initialization order (most Servlet 2.3 containers do).
+    -
+    - Use WebApplicationContextUtils.getWebApplicationContext(servletContext)
+    - to access it anywhere in the web application, outside of the framework.
+    -
+    - The root context is the parent of all servlet-specific contexts.
+    - This means that its beans are automatically available in these child contexts,
+    - both for getBean(name) calls and (external) bean references.
+    -->
+  <servlet>
+    <servlet-name>context</servlet-name>
+    <servlet-class>org.springframework.web.context.ContextLoaderServlet</servlet-class>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+  
+    <!--
+    - Spring web MVC servlet that dispatches requests to registered handlers.
+    - Has its own application context, by default defined in "{servlet-name}-servlet.xml",
+    - i.e. "petstore-servlet.xml" in this case.
+    -
+    - A web app can contain any number of such servlets.
+    - Note that this web app has a shared root application context, serving as parent
+    - of all DispatcherServlet contexts.
+    -->  
+  
+    <servlet>
+        <servlet-name>adqui</servlet-name>
+        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+        <load-on-startup>2</load-on-startup>
+    </servlet>
+    
+    
+    
+    
+      <!--
+    - Struts servlet that dispatches requests to registered actions.
+    - Reads its configuration from "struts-config.xml".
+    -
+    - A web app can just contain one such servlet.
+    - If you need multiple namespaces, use Struts' module mechanism.
+    -->
+  <servlet>
+    <servlet-name>action</servlet-name>
+    <servlet-class>org.apache.struts.action.ActionServlet</servlet-class>
+    <load-on-startup>3</load-on-startup>
+  </servlet>
+  
+    
+    <servlet-mapping>
+        <servlet-name>adqui</servlet-name>
+        <url-pattern>*.umsa</url-pattern>
+    </servlet-mapping>
+    
+    
+    <session-config>
+        <session-timeout>
+            25
+        </session-timeout>
+    </session-config>
+    
+    <welcome-file-list>
+        <welcome-file>index.html</welcome-file>
+    </welcome-file-list>
+    
+    
+    <servlet>
+        <servlet-name>reporteSolicitudBorrador</servlet-name>
+        <servlet-class>org.umsa.web.transaccionMateriales.reportes.ReporteSolicitudBorrador</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>reporteSolicitudBorrador</servlet-name>
+        <url-pattern>/reporteSolicitudBorrador</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>reporteSolicitud</servlet-name>
+        <servlet-class>org.umsa.web.transaccionMateriales.reportes.ReporteSolicitud</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>reporteSolicitud</servlet-name>
+        <url-pattern>/reporteSolicitud</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>reportePedido</servlet-name>
+        <servlet-class>org.umsa.web.transaccionMateriales.reportes.ReportePedido</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>reportePedido</servlet-name>
+        <url-pattern>/reportePedido</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>reporteOrden</servlet-name>
+        <servlet-class>org.umsa.web.transaccionMateriales.reportes.ReporteOrden</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>reporteOrden</servlet-name>
+        <url-pattern>/reporteOrden</url-pattern>
+    </servlet-mapping>
+    
+    
+    <servlet>
+        <servlet-name>reporteOrdenDescargo</servlet-name>
+        <servlet-class>org.umsa.web.transaccionMateriales.reportes.ReporteOrdenDescargo</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>reporteOrdenDescargo</servlet-name>
+        <url-pattern>/reporteOrdenDescargo</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>reporteNotaConformidad</servlet-name>
+        <servlet-class>org.umsa.web.transaccionMateriales.reportes.ReporteNotaConformidad2</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>reporteNotaConformidad</servlet-name>
+        <url-pattern>/reporteNotaConformidad</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>reporteOrdenDescargo2</servlet-name>
+        <servlet-class>org.umsa.web.transaccionMateriales.reportes.ReporteOrdenDescargo2</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>reporteOrdenDescargo2</servlet-name>
+        <url-pattern>/reporteOrdenDescargo2</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>reporteOrdenBorrador</servlet-name>
+        <servlet-class>org.umsa.web.transaccionMateriales.reportes.ReporteOrdenBorrador</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>reporteOrdenBorrador</servlet-name>
+        <url-pattern>/reporteOrdenBorrador</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+      <display-name>FileUploadServlet</display-name>
+      <servlet-name>FileUploadServlet</servlet-name>
+      <servlet-class>org.umsa.web.transaccionMateriales.FileUploadServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+      <servlet-name>FileUploadServlet</servlet-name>
+      <url-pattern>/uploadFile</url-pattern>
+    </servlet-mapping>
+    
+</web-app>

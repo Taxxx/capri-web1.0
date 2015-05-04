@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+
+<sqlMap namespace="Clientes">   
+
+  <resultMap id="DatosUsuario" class="org.umsa.domain.Clientes">
+    <result property="id_usuario"      column="cod_usuario" />
+    <result property="usuario"      column="usuario" />    
+    <result property="cod_almacen"      column="cod_almacen" />    
+  </resultMap>
+  <select id="getCodigoUsuario" resultMap="DatosUsuario">
+      <!--
+    select distinct t1.cod_usuario,t1.usuario ,t3.cod_almacen
+    from adquisiciones.adm_usuario t1 inner join adquisiciones.adm_usr_apert t2 on t1.cod_usuario=t2.cod_usuario
+    inner join adquisiciones.programatic_apert t3 on t3.cod_apert=t2.cod_apert
+    WHERE apodo = #apodo#
+    AND clave = #clave#
+    -->
+    select distinct t1.cod_usuario,t1.usuario ,t4.cod_almacen
+    from adquisiciones.adm_usuario t1 inner join adquisiciones.adm_usr_apert t2 on t1.cod_usuario=t2.cod_usuario
+    inner join adquisiciones.programatic_apert t3 on t3.cod_apert=t2.cod_apert
+    inner join ADM_USR_ALMACEN t4 on t1.COD_USUARIO=t4.COD_USUARIO
+    WHERE apodo = #apodo#
+    AND clave = #clave#     
+  </select>  
+  
+</sqlMap>
+

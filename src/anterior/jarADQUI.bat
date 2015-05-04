@@ -1,0 +1,1 @@
+java org.apache.axis.wsdl.WSDL2Java -p org.umsa.ConnectADQUI http://localhost:8080/axis/ADQUI/AdquiWS.jws?wsdl

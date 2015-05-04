@@ -1,0 +1,1 @@
+java org.apache.axis.wsdl.WSDL2Java -p org.umsa.ConnectSIGMA http://200.7.160.26/axis/CAPRICORNIO/SigmaCapriWS.jws?wsdl

@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+<!--
+    Document   : Insumos.xml
+    Created on : 16 de noviembre de 2010, 10:41
+    Author     : julian
+    Description:
+        Purpose of the document follows.
+-->
+
+<sqlMap namespace="Items">
+    
+    <typeAlias alias="Items" type="org.umsa.domain.Items"/>
+    <typeAlias alias="Transaccion" type="org.umsa.domain.Transaccion"/>
+    
+    <select id="getTipoTramite" resultClass="java.lang.String">
+        select t1.tipo_reporte from adquisiciones.tramites t1 
+        where cod_tramite=#cod_tramite# and cod_almacen=#cod_almacen#
+    </select>
+        
+    <select id="getItemTipo" resultClass="Items">
+        select cod_tipo_item||' - ' ||detalle as tipo_item
+        from adquisiciones.tipo_item 
+    </select>
+        
+    <select id="getItemGrupo" resultClass="Items">
+        SELECT DISTINCT
+             ITEM.DETALLE AS GRUPO
+        FROM
+             ADQUISICIONES.clasificadores_item ITEM              
+        WHERE
+             ITEM.COD_TIPO_ITEM=#value# 
+    </select>
+        
+    <select id="getItemRubro" resultClass="Items">
+        SELECT DISTINCT
+             ITEM.DETALLE_SUB_RUBRO AS RUBRO
+        FROM
+             ADQUISICIONES.clasificadores_item ITEM              
+        WHERE
+             ITEM.COD_TIPO_ITEM=#cod_tipo_item#  AND ITEM.DETALLE=#grupo#
+    </select>
+    
+    <select id="getItemArticulo" resultClass="Items">
+        SELECT DISTINCT
+             ITEM.ARTICULO AS ARTICULO
+        FROM
+             ADQUISICIONES.clasificadores_item ITEM              
+        WHERE
+             ITEM.COD_TIPO_ITEM=#cod_tipo_item# AND ITEM.DETALLE_SUB_RUBRO=#rubro#
+    </select>
+    
+    <select id="getItemArticuloUnidadMedida" resultClass="java.lang.String">
+        SELECT DISTINCT
+             (CASE WHEN ITEM.UNIDAD_MEDIDA is not null THEN ITEM.UNIDAD_MEDIDA ELSE ' ' END ) AS UNIDAD_MEDIDA
+        FROM
+             ADQUISICIONES.clasificadores_item ITEM              
+        WHERE
+             ITEM.COD_TIPO_ITEM=#cod_tipo_item# AND ITEM.ARTICULO=#articulo#
+    </select>
+
+    <select id="getTransaccionCodItem" resultClass="Transaccion">
+        select cod_transaccion,cod_item from adquisiciones.transaccion_detalle
+        where cod_transaccion=#cod_transaccion# and cod_item=#cod_item#
+    </select>
+    
+    <insert id="setTransaccionArticulo">
+        insert into adquisiciones.transaccion_detalle(cod_trans_detalle,cod_transaccion,cod_item,unidad_medida,cantidad_pedido,gestion)
+        values (ADQUISICIONES.SEC_COD_TRANS_DETALLE.NEXTVAL,#cod_transaccion#,#cod_item#,#unidad_medida#,#cantidad_pedido#,#gestion#)
+    </insert>
+    <select id="getTransaccionDetalle" resultClass="Transaccion">
+        select t1.cod_trans_detalle
+        from adquisiciones.transaccion_detalle t1
+        where t1.cod_transaccion = #cod_transaccion#
+    </select>
+    <select id="getTransaccionArticulos" resultClass="Transaccion">
+        <!--
+        select t1.cod_trans_detalle,t1.cod_transaccion,t4.detalle as tipo_item,t3.articulo,t1.unidad_medida,t1.cantidad_pedido as cantidad,null as terminos_ref,null as cod_docs, null as descripcion,NVL(t1.precio_unit,0) as precio_unit, t3.partida
+        from adquisiciones.transaccion_detalle t1         
+        inner join adquisiciones.clasificador_item t3 on t3.cod_item=t1.cod_item
+        inner join adquisiciones.tipo_item t4 on t4.cod_tipo_item=t3.cod_tipo_item
+        where cod_transaccion=#value#    
+        union        
+        select t2.cod_trans_detalle,t2.cod_transaccion,null as tipo_item,t1.detalle_solicitud as articulo,null as unidad_medida,null as cantidad,null as terminos_ref,null as cod_docs, null as descripcion, 0 as precio_unit, null as partida  
+        from adquisiciones.transaccion_det_complemento t1
+        inner join adquisiciones.transaccion_detalle t2 on t1.COD_TRANS_DETALLE=t2.COD_TRANS_DETALLE
+        where t2.cod_transaccion=#value#
+        order by cod_trans_detalle,tipo_item
+        -->
+        select  NVL(null,0) as cod_complemento,t1.cod_trans_detalle,t1.cod_transaccion,t1.detalle as articulo,t2.detalle as unidad_medida,t1.cantidad_pedido as cantidad,null as terminos_ref,null as cod_docs, null as descripcion,NVL(t1.precio_unit,0) as precio_unit, t1.partida, 0 as cod_item
+        from adquisiciones.transaccion_detalle t1 inner join UNIDAD_MEDIDA t2 on t1.COD_UNIDAD_MEDIDA=t2.COD_UNIDAD_MEDIDA         
+        where cod_transaccion=#value#   
+        union        
+        select t1.COD_COMPLEMENTO,t2.cod_trans_detalle,t2.cod_transaccion,t1.detalle_solicitud as articulo,null as unidad_medida,null as cantidad,null as terminos_ref,null as cod_docs, null as descripcion, 0 as precio_unit, null as partida, 0 as cod_item  
+        from adquisiciones.transaccion_det_complemento t1
+        inner join adquisiciones.transaccion_detalle t2 on t1.COD_TRANS_DETALLE=t2.COD_TRANS_DETALLE
+        where t2.cod_transaccion=#value#
+        order by cod_trans_detalle
+        
+    </select>
+    <select id="getTransaccionArticulos2" resultClass="Transaccion">
+        select t1.cod_trans_detalle,t1.cod_transaccion,t1.cod_unidad_medida,t1.cantidad_pedido as cantidad,t1.DETALLE,NVL(t1.precio_unit,0) as precio_unit,t1.partida,t1.precio_unit
+        from adquisiciones.transaccion_detalle t1         
+        where cod_transaccion=#value#
+        order by t1.COD_TRANS_DETALLE desc
+    </select>
+    <select id="getAdjuntos" resultClass="Transaccion">
+        <!--
+        select null as cod_trans_detalle,cod_transaccion,null as tipo_item,null as articulo,null as unidad_medida,null as cantidad,terminos_ref,cod_docs, descripcion, tipo_doc 
+        from adquisiciones.documentos
+        where cod_transaccion=#value# and estado = 'V'
+        -->
+        
+        select t1.COD_TRANSACCION, t1.TERMINOS_REF, t1.COD_DOCS, t1.DESCRIPCION, t2.DESCRIPCION as tipo_doc
+        from DOCUMENTOS t1 inner join TIPO_DOC t2 on t1.COD_ADJUNTO=t2.COD_ADJUNTO
+        where t1.COD_TRANSACCION=#value# and t1.ESTADO like 'V'
+        
+    </select>
+     
+    <select id="getBuscaItems" resultClass="Items">
+        <!--
+        select t1.cod_item,t1.unidad_medida,t3.detalle as tipo_item, t1.articulo 
+        from adquisiciones.item t1 
+        inner join adquisiciones.tipo_item t3 on t1.cod_tipo_item=t3.cod_tipo_item
+        where UPPER(t1.articulo) like #articulo# and t1.cod_tipo_item!=4 and t1.cod_tipo_item!=5
+        -->
+        select t1.cod_item,t1.partida,t1.unidad_medida,t3.detalle as tipo_item, t1.articulo 
+        from adquisiciones.clasificador_item t1 
+        inner join adquisiciones.tipo_item t3 on t1.cod_tipo_item=t3.cod_tipo_item
+        where UPPER(t1.articulo) like #articulo# and t1.cod_tipo_item=#cod_tipo_item#<!--and t1.cod_tipo_item!=4 and t1.cod_tipo_item!=5 and t1.cod_tipo_item=#cod_tipo_item#-->
+        
+        <!---
+        select t1.cod_item, t1.unidad_medida, t1.articulo
+        from adquisiciones.item t1 
+        -->
+    </select>
+    
+    <select id="getBuscaConsultoresObras" resultClass="Items">
+        select t1.cod_item,t1.unidad_medida,t3.detalle as tipo_item, t1.articulo 
+        from adquisiciones.clasificador_item t1 
+        inner join adquisiciones.tipo_item t3 on t1.cod_tipo_item=t3.cod_tipo_item
+        where t1.cod_tipo_item=#value#
+    </select>
+    <select id="BuscaItems" resultClass="Items">
+        SELECT cod_item, partida, articulo, gestion, tipo, total_filas
+        FROM (
+            SELECT cod_item, partida, articulo, gestion, tipo, total_filas, ROWNUM numfila
+            FROM (
+                  select t1.COD_ITEM, t1.ARTICULO, t1.GESTION, t2.DETALLE as tipo, (t1.PARTIDA||' - '||t3.DETALLE) as partida, COUNT( COD_ITEM) OVER () as total_filas
+                  from clasificador_item t1 inner join TIPO_ITEM t2 on t1.COD_TIPO_ITEM=t2.cod_tipo_item
+                  inner join PARTIDAS t3 on (t1.PARTIDA=t3.PARTIDA and t1.GESTION=t3.GESTION)
+                  where t1.COD_ITEM like #codigo# and t1.PARTIDA like #partida# and UPPER(t1.ARTICULO) like UPPER('%'||#articulo#||'%') and t1.GESTION like #gestion# and t1.COD_TIPO_ITEM like #tipo#
+                  and t1.ESTADO = 'V' and t3.TIPO = 't'
+            )
+        ) WHERE numfila BETWEEN #min# AND #max#
+    </select>
+</sqlMap>

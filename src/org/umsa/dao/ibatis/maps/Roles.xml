@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+
+<sqlMap namespace="Roles">
+    
+  <resultMap id="RolUsuario" class="org.umsa.domain.Roles">
+    <result property="id_rol"      column="cod_rol" />
+    <result property="rol"   column="rol" />          
+  </resultMap>  
+  <select id="getRolUsuario" resultMap="RolUsuario">
+      select t1.cod_rol,t2.rol from adquisiciones.adm_usr_rol t1 , adquisiciones.adm_rol t2
+      where t1.cod_rol=t2.cod_rol
+      and t1.cod_usuario=#id_usuario#
+            
+  </select>
+
+</sqlMap>
+

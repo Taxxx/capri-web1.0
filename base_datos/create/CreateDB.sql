@@ -1,0 +1,22 @@
+connect / as SYSDBA
+set echo on
+spool /u01/app/oracle/admin/ADQUI/create/CreateDB.log
+startup nomount pfile='/u01/app/oracle/admin/ADQUI/pfile/spfileADQUI.ora';
+CREATE DATABASE ADQUI
+MAXINSTANCES 8
+MAXLOGHISTORY 1
+MAXLOGFILES 16
+MAXLOGMEMBERS 3
+MAXDATAFILES 200
+DATAFILE '/u01/app/oracle/oradata/ADQUI/system01.dbf' SIZE 300M REUSE AUTOEXTEND ON NEXT 10M MAXSIZE 2000M EXTENT MANAGEMENT LOCAL
+SYSAUX DATAFILE '/u01/app/oracle/oradata/ADQUI/sysaux01.dbf' SIZE 300M REUSE AUTOEXTEND ON NEXT 10M MAXSIZE 2000M
+DEFAULT TEMPORARY TABLESPACE TEMP TEMPFILE '/u01/app/oracle/oradata/ADQUI/temp01.dbf' SIZE 200M REUSE AUTOEXTEND ON NEXT 2M MAXSIZE 2000M
+UNDO TABLESPACE "UNDOTBS1" DATAFILE '/u01/app/oracle/oradata/ADQUI/undotbs01.dbf' SIZE 200M REUSE AUTOEXTEND ON NEXT 5M MAXSIZE 2000M
+CHARACTER SET WE8ISO8859P1
+NATIONAL CHARACTER SET UTF8
+LOGFILE GROUP 1 ('/u01/app/oracle/oradata/ADQUI/redo0101.log','/u01/app/oracle/oradata/ADQUI/redo0102.log') SIZE 20M,
+GROUP 2 ('/u01/app/oracle/oradata/ADQUI/redo0201.log','/u01/app/oracle/oradata/ADQUI/redo0202.log') SIZE 20M,
+GROUP 3 ('/u01/app/oracle/oradata/ADQUI/redo0301.log','/u01/app/oracle/oradata/ADQUI/redo0302.log') SIZE 20M
+USER SYS IDENTIFIED BY manager USER SYSTEM IDENTIFIED BY manager;
+spool off
+exit

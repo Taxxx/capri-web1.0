@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+
+<sqlMap namespace="Operaciones">
+    <typeAlias alias="Operaciones" type="org.umsa.domain.Operaciones"/>
+    
+    
+    <select id="getUnidadesMedida" resultClass="Operaciones">
+        select t1.cod_unidad_medida, t1.detalle
+        from unidad_medida t1 ORDER BY t1.COD_UNIDAD_MEDIDA
+    </select>
+    <select id="Gestiones" resultClass="Operaciones">
+        select distinct t1.GESTION as gestion
+        from GESTION t1
+        order by t1.GESTION desc
+    </select>
+    <select id="GetPartidas" resultClass="Operaciones">
+        select t1.PARTIDA as partida, (t1.PARTIDA||' - '||t1.DETALLE) as detalle_partida 
+        from PARTIDAS t1
+        where t1.GESTION like #gestion# and t1.TIPO = 't' and t1.ESTADO='V' and t1.tipo='t'
+        order by partida
+    </select>
+    <select id="GetPartidastotales" resultClass="Operaciones">
+        select t1.PARTIDA as partida, (t1.PARTIDA||' - '||t1.DETALLE) as detalle_partida 
+        from PARTIDAS t1
+        where t1.TIPO = 't' and t1.ESTADO='V'
+        order by partida
+    </select>
+    <select id="GetItems" resultClass="Operaciones">
+        select t1.ARTICULO,t2.DETALLE,t1.UNIDAD_MEDIDA,t1.cod_item
+        from CLASIFICADOR_ITEM t1 inner join TIPO_ITEM t2 on t1.cod_tipo_item=t2.cod_tipo_item
+        where t1.PARTIDA=#partida#
+    </select>
+    <select id="GetDescPartida" resultClass="Operaciones">
+        select NVL(t1.descripcion,'Sin Descripcion') as descripcion
+        from PARTIDAS t1
+        where t1.partida = #partida#
+    </select>  
+    <select id="GetTiposDoc" resultClass="Operaciones">
+        select t1.TIPO_ID, (t1.SIGLA||' - '||t1.DESCRIPCION) as sigla
+        from TIPO_DOCUMENTO t1
+        where t1.ESTADO = 'V'
+    </select>
+    <select id="GetClasesBeneficiario" resultClass="Operaciones">
+        select t1.CLASE_BENEFICIARIO, t1.DESCRIPCION
+        from CLASE_BENEFICIARIO t1
+        where t1.ESTADO = 'V'
+    </select>
+    <select id="GetTipoItems" resultClass="Operaciones">
+        select t1.cod_tipo_item, t1.detalle
+        from TIPO_ITEM t1
+    </select>
+    
+    <select id="GetCuantias" resultClass="Operaciones">
+        SELECT t1.COD_CUANTIA ,t1.CUANTIA
+        from CUANTIA t1
+    </select>
+    <select id="GetTipos" resultClass="Operaciones">
+        SELECT t1.COD_W, t1.DETALLE as detalle_w 
+        from ADM_WORKFLOW t1
+    </select>
+    <select id="GetTiposADJ" resultClass="Operaciones">
+        select t1.cod_adjunto,t1.descripcion
+        from tipo_doc t1
+    </select>
+    
+    <select id="GetApertProg" resultClass="Operaciones">
+        select t1.APERTURA,t1.DETALLE
+        from PROGRAMATIC_APERT t1
+    </select>
+    
+    <select id="ListaAdjuntos" resultClass="Operaciones">
+        select t1.COD_TRANSACCION, t2.COD_CUANTIA, t2.COD_W, t2.COD_ADJUNTO, t3.DESCRIPCION
+        from TRANSACCION t1 inner join RESTRICCION_ADJUNTOS t2 on(t1.COD_CUANTIA=t2.COD_CUANTIA and t1.COD_W=t2.COD_W)
+        inner join TIPO_DOC t3 on t2.COD_ADJUNTO=t3.COD_ADJUNTO
+        where t1.COD_TRANSACCION=#cod_transaccion#
+    </select>
+</sqlMap>

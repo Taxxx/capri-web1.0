@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+
+<sqlMap namespace="Adjudicado">
+    <typeAlias alias="Adjudicado" type="org.umsa.domain.Adjudicado"/>
+    <select id="BuscaAdjudicados" resultClass="Adjudicado">
+        select documento, nombre, nombre_comercial, gestion, total_filas
+        from(select documento, nombre, nombre_comercial, gestion, rownum as numfila, count(documento) over() as total_filas
+        from(select P.COD_PROVEEDOR as documento, P.NOMBRE as nombre, P.NOMBRE_COMERCIAL as nombre_comercial, TD.gestion
+        from TRANSACCION_DETALLE TD inner join PROPONENTES P
+        on TD.COD_TRANSACCION=P.COD_TRANSACCION
+        where P.ESTADO='V' AND TD.ESTADO='C' AND TD.PARTIDA LIKE #partida# and TD.GESTION like #gestion# and P.COD_PROVEEDOR like #documento# and TD.DETALLE like upper('%'||#articulo#||'%') and (P.NOMBRE like upper('%'||#nombre#||'%') or P.NOMBRE_COMERCIAL like upper('%'||#nombre#||'%'))
+        GROUP BY P.COD_PROVEEDOR, P.NOMBRE, P.NOMBRE_COMERCIAL, TD.gestion)
+        )WHERE numfila BETWEEN #min# AND #max#
+    </select>
+    <select id="DetalleAdju" resultClass="Adjudicado">      
+        SELECT TD.PARTIDA as partida, TD.DETALLE as detalle, TD.GESTION as gestion
+        from TRANSACCION_DETALLE TD, TRANSACCION_NRO TN, PROPONENTES P
+        WHERE TD.COD_TRANSACCION=TN.COD_TRANSACCION AND P.COD_PROVEEDOR=TN.COD_PROVEEDOR AND P.ESTADO='V' AND TD.ESTADO='C' AND P.COD_PROVEEDOR like #documento#
+        GROUP BY TD.PARTIDA, TD.DETALLE, TD.GESTION
+    </select>
+</sqlMap>

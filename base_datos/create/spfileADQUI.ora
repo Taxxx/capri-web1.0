@@ -1,0 +1,24 @@
+*.background_dump_dest='/u01/app/oracle/admin/ADQUI/bdump'
+*.compatible='10.1.0.2.0'
+*.control_files='/u01/app/oracle/oradata/ADQUI/control01.ctl','/u01/app/oracle/oradata/ADQUI/control02.ctl','/u01/app/oracle/oradata/ADQUI/control03.ctl'
+*.core_dump_dest='/u01/app/oracle/admin/ADQUI/cdump'
+*.db_block_size=8192
+*.db_cache_size=25165824
+*.db_domain=''
+*.db_file_multiblock_read_count=16
+*.db_name='ADQUI'
+*.db_recovery_file_dest='/u01/app/oracle/flash_recovery_area'
+*.db_recovery_file_dest_size=2147483648
+*.dispatchers='(protocol=TCP) (SERVICE=ADQUIXDB)'
+*.java_pool_size=50331648
+*.job_queue_processes=10
+*.large_pool_size=8388608
+*.open_cursors=300
+*.pga_aggregate_target=25165824
+*.processes=250
+*.remote_login_passwordfile='EXCLUSIVE'
+*.shared_pool_size=99614720
+*.sort_area_size=65536
+*.undo_management='AUTO'
+*.undo_tablespace='UNDOTBS1'
+*.user_dump_dest='/u01/app/oracle/admin/ADQUI/udump'
