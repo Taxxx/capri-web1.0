@@ -79,6 +79,7 @@
                         <th>Nombre Comercial</th>
                         <th>Gestion</th>
                         <th>Articulos Adjudicados</th>
+                        <th>Informacion</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -115,6 +116,7 @@
                 <tbody></tbody>
             </table>
         </div>
+        <div id="dialog_detalle_proveedor" title="Detalle"></div>    
         <div id="dialog_vacio" title="Mensaje">
             <h3>Datos no Encontrados</h3>
         </div>
