@@ -38,6 +38,7 @@ public interface MiFacade {
   
   List BuscaAdjudicados(Adjudicado i);
   List DetalleAdju(Adjudicado i);
+  List InfAdju(Adjudicado i);
   
   List BuscaProveedor(Proveedor p);
   Proveedor ProveedorInfo(Proveedor p);

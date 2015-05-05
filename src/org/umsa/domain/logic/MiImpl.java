@@ -128,6 +128,10 @@ public class MiImpl implements MiFacade {
       System.out.println("llega a Det");
       return this.adjudicadosDao.DetalleAdju(i);
   }
+  public List InfAdju(Adjudicado i) {
+      System.out.println("llega a Det");
+      return this.adjudicadosDao.InforAdju(i);
+  }
   
   //Cod_UMSA
   public String getCodUmsa(){

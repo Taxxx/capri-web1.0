@@ -269,6 +269,9 @@
     <bean name="/ProveedorInfo.umsa" class="org.umsa.web.operaciones.proveedor.DetalleProveedor">
         <property name="adqui"><ref bean="adqui"/></property>
     </bean>
+    <bean name="/AdjudicadoInfo.umsa" class="org.umsa.web.operaciones.adjudicados.InfoAdju">
+        <property name="adqui"><ref bean="adqui"/></property>
+    </bean>
     <bean name="/BuscarItems.umsa" class="org.umsa.web.operaciones.item.BuscarItems">
         <property name="adqui"><ref bean="adqui"/></property>
     </bean>

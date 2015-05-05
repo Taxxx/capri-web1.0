@@ -21,4 +21,11 @@
         WHERE TD.COD_TRANSACCION=TN.COD_TRANSACCION AND P.COD_PROVEEDOR=TN.COD_PROVEEDOR AND P.ESTADO='V' AND TD.ESTADO='C' AND P.COD_PROVEEDOR like #documento#
         GROUP BY TD.PARTIDA, TD.DETALLE, TD.GESTION
     </select>
+    <select id="InformacionAdju" resultClass="Adjudicado">
+        select nombre,telefono,direccion,documento,tipo_id
+        from (select p.NOMBRE as nombre,p.TELEFONO as telefono,p.DIRECCION as direccion,p.COD_PROVEEDOR as documento,p.TIPO as tipo_id, ROWNUM as num
+        from PROPONENTES p
+        where p.COD_PROVEEDOR like #documento#)
+        where num like 1
+    </select>
 </sqlMap>

@@ -23,6 +23,7 @@ public interface AdjudicadosDao {
     
     List BuscaAdjudicados(Adjudicado i) throws DataAccessException;
     List DetalleAdju(Adjudicado i) throws DataAccessException;
+    List InforAdju(Adjudicado i) throws DataAccessException;
     //List getBuscaAdjudicados(adjudicados item) throws DataAccessException;
     /*public List BuscarAdjudicados(adjudicados i) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.

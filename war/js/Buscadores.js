@@ -233,18 +233,43 @@ function ajax_buscar_adjudicados(Limite, c, sw_paginacion){
 }
 function ajax_mas_detalle(tipo_id, documento){
     //alert(tipo_id+" &&& "+documento);
+    var x=0;
     $.ajax({
         type: 'post',
         url: '/capri-web/ProveedorInfo.umsa',
         data:{tipo_id:tipo_id, documento:documento},
         dataType: 'json',
         error: function(xhr, ajaxOptions, thrownError) {
-            alert(":( ERROR: "+xhr+" "+ajaxOptions+" "+thrownError);
+            //alert(":( ERROR: "+xhr+" "+ajaxOptions+" "+thrownError);
+            //alert(json.toString());
+            ajax_mas_detalle_adj(documento)
+            //x=1;
         },
         success: function(json) {
             //arma_resultados_clasificador();
             //alert("yeihhh");
+            //if(x==0){
             abrir_detalle_proveedor(json);
+            //arma_resultados_clasificador(json,c,Limite,sw_paginacion,total_filas);
+        }
+    });
+}
+function ajax_mas_detalle_adj(documento){
+    $.ajax({
+        type: 'post',
+        url: '/capri-web/AdjudicadoInfo.umsa',
+        data:{documento:documento},
+        dataType: 'json',
+        error: function(xhr, ajaxOptions, thrownError) {
+            alert(":( ERROR: "+xhr+" "+ajaxOptions+" "+thrownError);
+            
+            //ajax_mas_detalle_adj(documento)
+        },
+        success: function(json) {
+            //arma_resultados_clasificador();
+            //alert("yeihhh");
+            abrir_detalle_adjudicado(json);
+            //alert(json);
             //arma_resultados_clasificador(json,c,Limite,sw_paginacion,total_filas);
         }
     });
@@ -298,6 +323,7 @@ function arma_resultados_adjudicados(json, c, Limite, sw_paginacion, total_filas
             });
         $(".btn-proveedor-detalle").on("click", function(){
             ajax_mas_detalle($(this).attr('data-tipo_id'),$(this).attr('data-documento'));
+            //ajax_mas_detalle_adj($(this).attr('data-documento'));
         });
         /*****************/
         controla_desborde_paginacion(c+1,nro_paginas)
@@ -674,4 +700,20 @@ function abrir_detalle_proveedor(json){
     dialogx.append("<p>Tipo Documento:"+json.adh_tipo_id+"</p>");
     dialogx.append("<p>Codigo Documento: "+json.adh_documento+"</p>");
     dialogx.dialog("open");
+}
+function abrir_detalle_adjudicado(json){
+    var dialogx=$("#dialog_detalle_proveedor");
+    dialogx.empty();
+    $.each(json.Adjudicado, function(index, item){
+           dialogx.append("<h6>Información de Contacto</h3>");
+    //dialogx.append("<p>Lugar: "+json.dir_lugar+"</p>");
+    dialogx.append("<p>Direccion: "+item.dir_direccion+"</p>");
+    dialogx.append("<p>Telefono: "+item.dir_telefono+"</p>");
+    //dialogx.append("<p>Email: "+json.dir_email+"</p>");
+    dialogx.append("<h6>Información del Representante Legal</h3>");
+    dialogx.append("<p>Nombre: "+item.adh_nombre+"</p>");
+    dialogx.append("<p>Tipo Documento:"+item.adh_tipo_id+"</p>");
+    dialogx.append("<p>Codigo Documento: "+item.adh_documento+"</p>");
+    dialogx.dialog("open");
+        });
 }

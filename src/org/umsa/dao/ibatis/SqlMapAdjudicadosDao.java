@@ -39,5 +39,11 @@ public class SqlMapAdjudicadosDao extends SqlMapClientDaoSupport implements Adju
         return getSqlMapClientTemplate().queryForList("DetalleAdju", i);
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+
+    @Override
+    public List InforAdju(Adjudicado i) throws DataAccessException {
+        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return getSqlMapClientTemplate().queryForList("InformacionAdju", i);
+    }
     
 }

@@ -14,15 +14,10 @@ import java.io.Serializable;
  */
 public class Adjudicado implements Serializable
 {
+    private String telefono;
+    private String direccion;
+    //====================
     private String tipo_id;
-
-    public void setTipo_id(String tipo_id) {
-        this.tipo_id = tipo_id;
-    }
-
-    public String getTipo_id() {
-        return tipo_id;
-    }
     private String documento;
     private String nombre;
     private String nombre_comercial;
@@ -35,7 +30,30 @@ public class Adjudicado implements Serializable
     private String total_filas;
     //========================
     private String detalle;
+
+    public String getTelefono() {
+        return telefono;
+    }
+
+    public String getDireccion() {
+        return direccion;
+    }
+
+    public void setTelefono(String telefono) {
+        this.telefono = telefono;
+    }
+
+    public void setDireccion(String direccion) {
+        this.direccion = direccion;
+    }
     
+    public void setTipo_id(String tipo_id) {
+        this.tipo_id = tipo_id;
+    }
+
+    public String getTipo_id() {
+        return tipo_id;
+    }
     public void setDetalle(String detalle) {
         this.detalle = detalle;
     }
