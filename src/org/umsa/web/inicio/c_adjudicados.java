@@ -20,6 +20,7 @@ import org.umsa.web.herramientas.i_formatterDate;
  *
  * @author alex
  */
+//esto adicione
 public class c_adjudicados extends AbstractController
 {
     private MiFacade adqui;
