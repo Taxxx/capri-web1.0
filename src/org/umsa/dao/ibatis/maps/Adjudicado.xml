@@ -5,13 +5,14 @@
 <sqlMap namespace="Adjudicado">
     <typeAlias alias="Adjudicado" type="org.umsa.domain.Adjudicado"/>
     <select id="BuscaAdjudicados" resultClass="Adjudicado">
-        select documento, nombre, nombre_comercial, gestion, total_filas
-        from(select documento, nombre, nombre_comercial, gestion, rownum as numfila, count(documento) over() as total_filas
-        from(select P.COD_PROVEEDOR as documento, P.NOMBRE as nombre, P.NOMBRE_COMERCIAL as nombre_comercial, TD.gestion
+        select tipo_id,documento, nombre, nombre_comercial, gestion, total_filas
+        from(select tipo_id,documento, nombre, nombre_comercial, gestion, rownum as numfila, count(documento) over() as total_filas
+        from(select DISTINCT P.TIPO as tipo_id,P.COD_PROVEEDOR as documento, P.NOMBRE as nombre, P.NOMBRE_COMERCIAL as nombre_comercial, TD.gestion
         from TRANSACCION_DETALLE TD inner join PROPONENTES P
         on TD.COD_TRANSACCION=P.COD_TRANSACCION
-        where P.ESTADO='V' AND TD.ESTADO='C' AND TD.PARTIDA LIKE #partida# and TD.GESTION like #gestion# and P.COD_PROVEEDOR like #documento# and TD.DETALLE like upper('%'||#articulo#||'%') and (P.NOMBRE like upper('%'||#nombre#||'%') or P.NOMBRE_COMERCIAL like upper('%'||#nombre#||'%'))
-        GROUP BY P.COD_PROVEEDOR, P.NOMBRE, P.NOMBRE_COMERCIAL, TD.gestion)
+        and P.ESTADO='V' AND TD.ESTADO='C' AND TD.PARTIDA LIKE #partida# and TD.GESTION like #gestion# and P.COD_PROVEEDOR like #documento# and TD.DETALLE like upper('%'||#articulo#||'%') and (P.NOMBRE like upper('%'||#nombre#||'%') or P.NOMBRE_COMERCIAL like upper('%'||#nombre#||'%'))
+        ORDER BY P.COD_PROVEEDOR
+        )
         )WHERE numfila BETWEEN #min# AND #max#
     </select>
     <select id="DetalleAdju" resultClass="Adjudicado">      

@@ -103,7 +103,7 @@ public class BuscarAdjudicados implements Controller
                 total_filas=aux.getTotal_filas();
                 sw=false;
             }else{aux=(Adjudicado) i.next();}
-            
+            JSNItem.put("tipo_id", aux.getTipo_id());
             JSNItem.put("codigo", aux.getDocumento());
             JSNItem.put("nombre", aux.getNombre());
             JSNItem.put("nombre_comercial", aux.getNombre_comercial());

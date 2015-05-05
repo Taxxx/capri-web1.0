@@ -289,10 +289,15 @@ function arma_resultados_adjudicados(json, c, Limite, sw_paginacion, total_filas
             nro=((c*Limite)+index)+1;
             x.append("<tr><td>"+nro+"</td><td>"+item.codigo+"</td><td>"+item.nombre+"</td><td>"+item.nombre_comercial+"</td><td>"+item.gestion+"</td><td><button data-documento ='"+item.codigo+"' \n\\n\
                          \n\
-                        class='btn_detalle_adjudicado'>VER</button></td></tr>");
-            $(".btn_detalle_adjudicado").on("click",function(){
+                        class='btn_detalle_adjudicado'>VER</button></td><td><button data-tipo_id='"+item.tipo_id+"' data-documento ='"+item.codigo+"' \n\\n\
+                         \n\
+                        class='btn-proveedor-detalle'>Informacion</button></td></tr>");
+        });
+        $(".btn_detalle_adjudicado").on("click",function(){
                 detalle_adjudicado($(this).attr('data-documento'));
             });
+        $(".btn-proveedor-detalle").on("click", function(){
+            ajax_mas_detalle($(this).attr('data-tipo_id'),$(this).attr('data-documento'));
         });
         /*****************/
         controla_desborde_paginacion(c+1,nro_paginas)
