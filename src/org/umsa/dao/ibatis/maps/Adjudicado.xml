@@ -18,7 +18,7 @@
     <select id="DetalleAdju" resultClass="Adjudicado">      
         SELECT TD.PARTIDA as partida, TD.DETALLE as detalle, TD.GESTION as gestion
         from TRANSACCION_DETALLE TD, TRANSACCION_NRO TN, PROPONENTES P
-        WHERE TD.COD_TRANSACCION=TN.COD_TRANSACCION AND P.COD_PROVEEDOR=TN.COD_PROVEEDOR AND P.ESTADO='V' AND TD.ESTADO='C' AND P.COD_PROVEEDOR like #documento#
+        WHERE TD.COD_TRANSACCION=TN.COD_TRANSACCION AND P.COD_TRANS_NRO=TN.COD_TRANS_NRO AND P.ESTADO='V' AND TD.ESTADO='C' AND P.COD_PROVEEDOR like #documento#
         GROUP BY TD.PARTIDA, TD.DETALLE, TD.GESTION
     </select>
     <select id="InformacionAdju" resultClass="Adjudicado">

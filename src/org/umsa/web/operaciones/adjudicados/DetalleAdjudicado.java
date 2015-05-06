@@ -37,6 +37,7 @@ public class DetalleAdjudicado implements Controller
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         PrintWriter out = response.getWriter();
         String documento =request.getParameter("documento");
+        int sw=0;
         Adjudicado adju=new Adjudicado();
         adju.setDocumento(documento);
         JSONObject Listado = new JSONObject();
@@ -50,6 +51,7 @@ public class DetalleAdjudicado implements Controller
         //out.println("<listado>");
         Adjudicado aux;
         while( i.hasNext() ) {
+            sw=1;
             System.out.println("entra al while");
             JSNRastreo = new JSONObject();
             aux=(Adjudicado) i.next();
