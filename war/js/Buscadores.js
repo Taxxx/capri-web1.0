@@ -705,7 +705,7 @@ function abrir_detalle_adjudicado(json){
     var dialogx=$("#dialog_detalle_proveedor");
     dialogx.empty();
     $.each(json.Adjudicado, function(index, item){
-    dialogx.append("<p><span>ADVERTENCIA: </span>la persona no esta registrado en el sigma</p>");
+    dialogx.append("<p><span style='color: red'>ADVERTENCIA: </span>la persona no esta registrado en el sigma</p>");
     dialogx.append("<h6>Información de Contacto</h3>");
     //dialogx.append("<p>Lugar: "+json.dir_lugar+"</p>");
     dialogx.append("<p>Direccion: "+item.dir_direccion+"</p>");
