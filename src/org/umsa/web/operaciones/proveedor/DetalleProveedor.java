@@ -8,6 +8,7 @@ package org.umsa.web.operaciones.proveedor;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Map;
 import javax.servlet.ServletException;
@@ -42,22 +43,30 @@ public class DetalleProveedor implements Controller {
         
             String tipo_id =request.getParameter("tipo_id");
             String documento =request.getParameter("documento");
+            long x=Long.parseLong(documento);
+            x=x/1000;
+            String doc=Integer.toString((int) x);
             Proveedor p= new Proveedor();
             System.out.println("tipo_id: "+tipo_id+" documento: "+documento);
             p.setTipo_id(tipo_id);
             p.setDocumento(documento);
-            
             Service services = new Service();
             Call call = (Call) services.createCall();
             call.setTargetEndpointAddress(new java.net.URL(endpoint));
             call.setOperationName("getBeneficiariosDetalleCapriSigma");
-            //Proveedor aux= (Proveedor)call.invoke(new Object[]{"4277626", "C"});
-            Map[] result = (Map[])call.invoke(new Object[]{documento, tipo_id});
-            //Map[] result = (Map[])call.invoke(new Object[]{"8442181", "C"});
-            response.setContentType("application/json; charset=UTF-8");
+            Map ex=null;
             PrintWriter out = response.getWriter();
             JSONObject JSNProveedor;
             JSNProveedor = new JSONObject();
+        
+            //Proveedor aux= (Proveedor)call.invoke(new Object[]{"4277626", "C"});
+        try{
+            Map[] result = (Map[])call.invoke(new Object[]{documento, tipo_id});
+            //Map[] result = (Map[])call.invoke(new Object[]{"8442181", "C"});
+            response.setContentType("application/json; charset=UTF-8");
+            out = response.getWriter();
+            JSNProveedor = new JSONObject();
+        
             for (Map e : result) {
                 
                 //System.out.println(e.size());
@@ -80,13 +89,42 @@ public class DetalleProveedor implements Controller {
                     
                 }*/
             }
-            
+        }catch(Exception e1)
+        {
+            Map[] result = (Map[])call.invoke(new Object[]{doc, tipo_id});
+            //Map[] result = (Map[])call.invoke(new Object[]{"8442181", "C"});
+            response.setContentType("application/json; charset=UTF-8");
+            out = response.getWriter();
+            JSNProveedor = new JSONObject();
+        
+            for (Map e : result) {
+                
+                //System.out.println(e.size());
+                System.out.println("Yeahhh --> "+e.get("ADH_DOCUMENTO"));
+                System.out.println(e.values());
+                JSNProveedor.put("adh_nombre", e.get("ADH_NOMBRE"));
+                JSNProveedor.put("adh_tipo_id", e.get("ADH_TIPO_ID"));
+                JSNProveedor.put("adh_documento", e.get("ADH_DOCUMENTO"));
+
+                JSNProveedor.put("dir_lugar", e.get("DIR_LUGAR"));
+                JSNProveedor.put("dir_direccion", e.get("DIR_DIRECCION"));
+                JSNProveedor.put("dir_telefono", e.get("DIR_TELEFONO"));
+                JSNProveedor.put("dir_email", e.get("DIR_EMAIL"));
+                
+                /*Iterator it = e.entrySet().iterator();
+                while(it.hasNext()){
+                    Map.Entry aux = (Map.Entry)it.next();
+                    //System.out.println(x.getKey() + " " + x.getValue());
+                    
+                }*/
+            }
+        }
             System.out.println("===================== Yeah ======================");
             System.out.println(JSNProveedor.toJSONString());
             out.print(JSNProveedor);
             
             //aux.get(0);
-            System.out.println("Holaaaaaaaaaaaaaaaa que tallllllllllll :D -->"+result.toString());
+            //System.out.println("Holaaaaaaaaaaaaaaaa que tallllllllllll :D -->"+result.toString());
             
             
             
