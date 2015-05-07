@@ -36,6 +36,9 @@
                 if(f.cod_cuantia.value == '--') {
                     alert('Debe elejir el tipo de cuantia'); return false;
                 }
+                if(f.cod_w.value == '0') {
+                    alert('Debe elejir el tipo de proceso'); return false;
+                }
                 
                 return true;
             }
@@ -104,7 +107,7 @@
                            
                             <p>
                                 <label>Tipo Proceso </label>
-                                <select name="cod_w" required>
+                                <select id="cod_w" name="cod_w" required>
                                     <option value="0"> -- Escoja un tipo de Proceso --</option>
                                     <option value="1">SOLICITUD DE MATERIALES Y/O ACTIVOS</option>
                                     <option value="3">CONSULTORIAS</option> 
