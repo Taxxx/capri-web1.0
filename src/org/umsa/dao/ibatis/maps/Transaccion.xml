@@ -415,7 +415,7 @@
         order by t1.fecha DESC
         -->
         select distinct t1.COD_TRANSACCION, NVL(t1.cuce,'Sin Asignar') as cuce, t1.FECHA, t1.DETALLE, t1.USUARIO_SOL,t1.tipo_sol,t5.COD_TRANS_NRO,t5.nro as nro_sol_comp
-        from transaccion t1 inner join transaccion_detalle t2 on t1.COD_TRANSACCION=t2.COD_TRANSACCION
+        from transaccion t1 inner join transaccion_detalle t2 on t1.COD_TRANSACCION=t2.COD_TRANSACCION and t1.ESTADO='V'
         inner join adm_usuario t3 on t1.USUARIO_REG=t3.COD_USUARIO
         inner join ESTADOS t4 on t2.ESTADO=t4.CODIGO
         inner join transaccion_nro t5 on t1.COD_TRANSACCION=t5.COD_TRANSACCION and t5.COD_TRAMITE=1
