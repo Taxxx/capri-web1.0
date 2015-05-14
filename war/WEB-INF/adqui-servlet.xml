@@ -23,8 +23,10 @@
 <!-- ========================= NOTA DE CONFORMIDAD ========================= -->
 <bean name="/GetNotaConformidad.umsa" class="org.umsa.web.operaciones.GetNotaConformidad"/>
 <bean name="/UpdateNotaConformidad.umsa" class="org.umsa.web.operaciones.UpdateNotaConformidad"/>
-
-
+<!-- ==== RESTRICCIONES AVANZA TRAMITE ===== -->
+<bean name="/RestriccionAvanza.umsa" class="org.umsa.web.operaciones.RestriccionAvanza">
+    <property name="adqui" ref="adqui"/>
+</bean>
 <!-- Generar Orden de Compra-->
   <!--bean name="/ReporteNotaConformidad.umsa" class="org.umsa.web.transaccionMateriales.reportes.ReporteNotaConformidad2"/-->
   

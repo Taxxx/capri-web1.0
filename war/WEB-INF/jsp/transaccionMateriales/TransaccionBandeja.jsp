@@ -74,14 +74,22 @@
                                     <td><c:out value="${lista.usuario_sol}"/></td>
                                     <td><c:out value="${lista.detalle}"/> </td>
                                     <td><c:out value="${lista.obs}"/></td>
-                                    <td><a href="<c:url value="/TransaccionSolicitudAvanza.umsa">
+                                    
+                                    <td>
+                                        <%--a class="btn-avanza" href="<c:url value="/TransaccionSolicitudAvanza.umsa">
                                                <c:param name="cod_estado" value="${lista.cod_estado}"/> 
                                                <c:param name="cod_tramite" value="${cod_tramite}"/> 
                                                <c:param name="tipo_tramite" value="${tipo_tramite}"/> 
                                                <c:param name="cod_w" value="${lista.cod_w}"/>
                                                <c:param name="cuce" value="${lista.cuce}"/>
                                                <c:param name="cod_transaccion" value="${lista.cod_transaccion}"/></c:url>"
-                                           onclick="javascript:return confirm('¿Desea AVANZAR esta transaccion ?')"  style="color:green">Avanzar</a>
+                                             style="color:green">
+                                            Avanzar
+                                        </a--%>
+                                               <a class="btn-avanza" href="#" data-cod_estado="${lista.cod_estado}" data-cod_tramite="${cod_tramite}" data-tipo_tramite="${tipo_tramite}" data-cod_w="${lista.cod_w}" data-cuce="${lista.cuce}" data-cod_transaccion="${lista.cod_transaccion}">
+                                                   Avanzar
+                                               </a>
+                                        
                                         <a href="<c:url value="/TransaccionElimina.umsa">
                                                <c:param name="cod_tramite" value="${cod_tramite}"/> 
                                                <c:param name="cod_w" value="${lista.cod_w}"/>
@@ -161,6 +169,22 @@
                             </tr>
                         </tbody>
                     </table>
+                </div>
+                
+                <div id="dialog_restriccion_cantidad" title="ALERTA!!!!">
+                    <!--span>Error de Restriccion</span-->
+                </div>
+                <div id="dialog_restriccion_precio" title="ALERTA!!!!">
+                    <!--span>Error de Restriccion</span-->
+                </div>
+                <div id="dialog_restriccion_unidad_medida" title="ALERTA!!!!">
+                    <!--span>Error de Restriccion</span-->
+                </div>
+                <div id="dialog_restriccion_detalle" title="ALERTA!!!!">
+                    <!--span>Error de Restriccion</span-->
+                </div>
+                <div id="dialog_restriccion_size" title="ALERTA!!!!">
+                    <!--span>Error de Restriccion</span-->
                 </div>
                 
             </div>          

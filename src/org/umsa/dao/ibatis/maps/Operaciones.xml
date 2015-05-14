@@ -76,4 +76,10 @@
         inner join TIPO_DOC t3 on t2.COD_ADJUNTO=t3.COD_ADJUNTO
         where t1.COD_TRANSACCION=#cod_transaccion#
     </select>
+    
+    <select id="RestriccionItems" resultClass="Operaciones">
+        select t1.detalle, t1.cantidad_pedido as cantidad, t1.precio_unit as precio, t1.cod_unidad_medida as unidad_medida
+        from transaccion_detalle t1
+        where t1.cod_transaccion = #cod_transaccion#
+    </select>
 </sqlMap>

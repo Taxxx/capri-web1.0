@@ -14,7 +14,8 @@ import org.umsa.domain.Operaciones;
  * @author UMSA-JES
  */
 public interface OperacionesDao {
-                
+    
+    List RestriccionItems(Operaciones operaciones) throws DataAccessException;//Lista Items 
     List ListaAdjuntos(Operaciones o) throws DataAccessException;
     List Gestiones() throws DataAccessException;
     List getUnidadesMedida() throws DataAccessException;

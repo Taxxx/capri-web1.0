@@ -17,6 +17,10 @@ import org.umsa.domain.Operaciones;
  * @author UMSA-JES
  */
 public class SqlMapOperacionesDao extends SqlMapClientDaoSupport implements OperacionesDao{
+    
+    public List RestriccionItems(Operaciones operaciones) throws DataAccessException {
+        return getSqlMapClientTemplate().queryForList("RestriccionItems", operaciones);
+    }
     public List GetDescPartida(Operaciones o) throws DataAccessException {
         return getSqlMapClientTemplate().queryForList("GetDescPartida", o);
     }

@@ -4,7 +4,132 @@ function inicia() {
 //    controla_carga_ajax();
     botones();
     dialogs();
+    restricciones();
     // mensaje_registro();
+}
+
+function restricciones(){
+    $(".btn-avanza").on("click", function(event){
+       event.preventDefault();
+       //alert("Hola Mamá!!!!");
+       ajax_restriccion($(this),$(this).data("cod_transaccion"),
+                        $(this).data("cod_estado"),
+                        $(this).data("cod_tramite"),
+                        $(this).data("tipo_tramite"),
+                        $(this).data("cuce"),
+                        $(this).data("cod_w")
+       );
+       
+       //return confirm('¿Desea AVANZAR esta transaccion ?');
+    });
+}
+
+function ajax_restriccion(boton,cod_transaccion,cod_estado,cod_tramite,tipo_tramite,cuce,cod_w){
+    var sw = false;
+    $.ajax({
+        type: 'post',
+        url: '/capri-web/RestriccionAvanza.umsa',
+        data: {cod_transaccion: cod_transaccion},
+        dataType: 'json',
+        error: function(xhr, ajaxOptions, thrownError) {
+            alert(":( ERROR: " + xhr + " " + ajaxOptions + " " + thrownError);
+        },
+        success: function(json) {
+            //alert("Exito!!!"+json.Items);
+            var alertas = json.Items.split(",");
+            $.each(alertas, function(index, item) {
+                if(item === "0"){
+                    if(index === 0){
+                        //alert("Restriccion Cantidad "+index+" :/");
+                        $("#dialog_restriccion_cantidad").html("<span style='color:red'>TODOS LOS ITEMS DEBEN TENER UNA CANTIDAD MAYOR A 0</span>");
+                        $("#dialog_restriccion_cantidad").dialog("open");
+                        sw=true;
+                    }
+                        
+                    if(index === 1){
+//                        alert("Restriccion Precio "+index+" :/");
+                          $("#dialog_restriccion_precio").html("<span style='color:red'>TODOS LOS ITEMS DEBEN TENER UN PRECIO MAYOR A 0</span>");
+                          $("#dialog_restriccion_precio").dialog("open");
+                          sw=true;
+                    }
+                        
+                    if(index === 2){
+//                        alert("Restriccion Unidad Medida "+index+" :/");ç
+                          $("#dialog_restriccion_unidad_medida").html("<span style='color:red'>TODOS LOS ITEMS DEBEN TENER UNIDAD DE MEDIDA</span>");
+                          $("#dialog_restriccion_unidad_medida").dialog("open");
+                          sw=true;
+                    }
+                        
+                    if(index === 3){
+//                        alert("Restriccion Detalle "+index+" :/");
+                          $("#dialog_restriccion_detalle").html("<span style='color:red'>TODOS LOS ITEMS DEBEN TENER UN DETALLE</span>");
+                          $("#dialog_restriccion_detalle").dialog("open");
+                          sw=true;
+                    }
+                    
+                    if(index === 4){
+//                        alert("Restriccion Detalle "+index+" :/");
+                          $("#dialog_restriccion_size").html("<span style='color:red'>EL FORMULARIO DEBE TENER AL MENOS UN ITEM</span>");
+                          $("#dialog_restriccion_size").dialog("open");
+                          sw=true;
+                    }
+                }                     
+            });
+//            if(sw)
+//                return;
+//            else
+//                ajax_avanza_tramite();
+            
+            //arma_resultados_clasificador();
+            //alert("yeihhh");
+            //arma_resultados_clasificador(json,c,Limite,sw_paginacion,total_filas);
+            //genera_lista_items(json);
+        },
+        complete: function(){
+            if(sw)
+                return;
+            else
+                ajax_avanza_tramite(boton,cod_transaccion,cod_estado,cod_tramite,tipo_tramite,cuce,cod_w);
+        }
+    });
+}
+
+function ajax_avanza_tramite(boton,cod_transaccion,cod_estado,cod_tramite,tipo_tramite,cuce,cod_w){
+    //console.log("wujuu");
+//    alert("Oka!!! "+$(".btn-avanza").data("cod_estado"));
+//    alert("Oka!!! "+$(".btn-avanza").data("cod_tramite"));
+//    alert("Oka!!! "+$(".btn-avanza").data("tipo_tramite"));
+//    alert("Oka!!! "+$(".btn-avanza").data("cod_w"));
+//    alert("Oka!!! "+$(".btn-avanza").data("cuce"));
+//    alert("Oka!!! "+$(".btn-avanza").data("cod_transaccion"));
+      
+    
+    $.ajax({
+        type: 'get',
+        url: '/capri-web/TransaccionSolicitudAvanza.umsa',
+        async: false,
+        data: {
+            cod_estado: cod_estado,
+            cod_tramite: cod_tramite,
+            tipo_tramite: tipo_tramite,
+            cod_w: cod_w,
+            cuce: cuce,
+            cod_transaccion: cod_transaccion
+        },
+//        dataType: 'json',
+        error: function(xhr, ajaxOptions, thrownError) {
+            alert(":( ERROR: " + xhr + " " + ajaxOptions + " " + thrownError);
+        },
+        success: function(json) {
+            //arma_resultados_clasificador();
+            //alert("yeihhh");
+            //arma_resultados_clasificador(json,c,Limite,sw_paginacion,total_filas);
+//            genera_lista_items(json);
+            //boton.parents(":eq(1)").css("background","red");
+            boton.parents(":eq(1)").remove();
+            //alert("Exito :D");
+        }
+    });
 }
 function controla_carga_ajax() {
     $(document).ajaxStart(function() {
@@ -172,6 +297,36 @@ function dialogs() {
         alert('my custom message');
     });
     
+    $("#dialog_restriccion_size").dialog({
+        autoOpen: false,
+        width: 500,
+        height: 'auto',
+        modal: true
+    });
+    $("#dialog_restriccion_cantidad").dialog({
+        autoOpen: false,
+        width: 500,
+        height: 'auto',
+        modal: true
+    });
+    $("#dialog_restriccion_precio").dialog({
+        autoOpen: false,
+        width: 500,
+        height: 'auto',
+        modal: true
+    });
+    $("#dialog_restriccion_unidad_medida").dialog({
+        autoOpen: false,
+        width: 500,
+        height: 'auto',
+        modal: true
+    });
+    $("#dialog_restriccion_detalle").dialog({
+        autoOpen: false,
+        width: 500,
+        height: 'auto',
+        modal: true
+    });
     
     $("#dialog_carga").dialog({
         autoOpen: false,

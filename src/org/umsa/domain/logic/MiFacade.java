@@ -11,6 +11,7 @@ import org.umsa.domain.Adjudicado;
 
 public interface MiFacade {
     List RestriccionAdjuntos(Transaccion t);
+    List RestriccionItems(Operaciones operaciones);
     void generaCUCE(String cod_transaccion);
   /********OPERACIONES*************/
     List GetDescPartida(Operaciones o);

@@ -8,6 +8,7 @@ package org.umsa.dao;
 import java.util.List;
 import org.springframework.dao.DataAccessException;
 import org.umsa.domain.Clientes;
+import org.umsa.domain.Operaciones;
 import org.umsa.domain.Transaccion;
 
 /**
@@ -16,6 +17,8 @@ import org.umsa.domain.Transaccion;
  */
 
 public interface TransaccionDao {
+    
+    
     List RestriccionAdjuntos(Transaccion transaccion) throws DataAccessException;
     void generaCUCE(String cod_transaccion) throws DataAccessException;
     /*COD UMSA*/

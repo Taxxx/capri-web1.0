@@ -18,6 +18,25 @@ public class Operaciones {
     private String cod_tipo_item, detalle,apertura;
     private String articulo,unidad_medida,cod_item;
     private String cod_unidad_medida;
+    private String cod_transaccion,cod_cuantia, cuantia, cod_w, detalle_w;
+    private String precio,cantidad;
+
+    public String getCantidad() {
+        return cantidad;
+    }
+
+    public void setCantidad(String cantidad) {
+        this.cantidad = cantidad;
+    }
+
+    
+    public String getPrecio() {
+        return precio;
+    }
+
+    public void setPrecio(String precio) {
+        this.precio = precio;
+    }
 
     public String getCod_unidad_medida() {
         return cod_unidad_medida;
@@ -58,8 +77,6 @@ public class Operaciones {
     public void setApertura(String apertura) {
         this.apertura = apertura;
     }
-
-    private String cod_transaccion,cod_cuantia, cuantia, cod_w, detalle_w;
 
     public String getCod_transaccion() {
         return cod_transaccion;

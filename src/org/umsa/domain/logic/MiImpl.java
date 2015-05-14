@@ -28,6 +28,9 @@ public class MiImpl implements MiFacade {
   public List RestriccionAdjuntos(Transaccion transaccion) {
       return this.transaccionDao.RestriccionAdjuntos(transaccion);
   }
+  public List RestriccionItems(Operaciones operaciones) {
+      return this.operacionesDao.RestriccionItems(operaciones);
+  }
   public void generaCUCE(String cod_transaccion){
       this.transaccionDao.generaCUCE(cod_transaccion);
   }

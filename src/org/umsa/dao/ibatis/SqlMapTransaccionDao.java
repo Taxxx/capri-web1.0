@@ -22,6 +22,7 @@ public class SqlMapTransaccionDao extends SqlMapClientDaoSupport implements Tran
     public List RestriccionAdjuntos(Transaccion transaccion) throws DataAccessException {
         return getSqlMapClientTemplate().queryForList("RestriccionAdjuntos", transaccion);
     }
+    
     public void generaCUCE(String cod_transaccion) throws DataAccessException {
         getSqlMapClientTemplate().queryForObject("generaCUCE", cod_transaccion);
     }
