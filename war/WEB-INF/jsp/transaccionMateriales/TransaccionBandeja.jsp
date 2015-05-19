@@ -171,6 +171,10 @@
                     </table>
                 </div>
                 
+                <div id="dialog_avanza" title="AVANZAR">
+                    <!--span>Error de Restriccion</span-->
+                    
+                </div>
                 <div id="dialog_restriccion_cantidad" title="ALERTA!!!!">
                     <!--span>Error de Restriccion</span-->
                 </div>

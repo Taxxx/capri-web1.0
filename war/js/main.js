@@ -8,23 +8,54 @@ function inicia() {
     // mensaje_registro();
 }
 
-function restricciones(){
-    $(".btn-avanza").on("click", function(event){
-       event.preventDefault();
-       //alert("Hola Mamá!!!!");
-       ajax_restriccion($(this),$(this).data("cod_transaccion"),
-                        $(this).data("cod_estado"),
-                        $(this).data("cod_tramite"),
-                        $(this).data("tipo_tramite"),
-                        $(this).data("cuce"),
-                        $(this).data("cod_w")
-       );
-       
-       //return confirm('¿Desea AVANZAR esta transaccion ?');
+function restricciones() {
+    $(".btn-avanza").on("click", function(event) {
+        var boton = $(this);
+        event.preventDefault();
+        //alert("Hola Mamá!!!!");
+        //$("#dialog_avanza").data("boton",$(this));
+        $("#dialog_avanza").html("<span>¿Esta seguro de avanzar el tramite?</span>");
+        $("#dialog_avanza").dialog({
+            autoOpen: false,
+            width: 500,
+            height: 'auto',
+            modal: true,
+            buttons: {
+                'NO': function() {
+                    //alert($(this).data('cod_trans_nro'));
+                    $(this).dialog('close');
+                },
+                'SI': function() {
+
+                    ajax_restriccion(boton, boton.data("cod_transaccion"),
+                            boton.data("cod_estado"),
+                            boton.data("cod_tramite"),
+                            boton.data("tipo_tramite"),
+                            boton.data("cuce"),
+                            boton.data("cod_w")
+                            );
+                    $(this).dialog('close');
+
+//                    $(this).dialog('close');
+//                    alert($("#dialog_notaConformidad form").serialize());
+//                    ajax_update_nc($(this).data('cod_trans_nro'));
+                }
+            }
+        });
+        $("#dialog_avanza").dialog("open");
+//       ajax_restriccion($(this),$(this).data("cod_transaccion"),
+//                        $(this).data("cod_estado"),
+//                        $(this).data("cod_tramite"),
+//                        $(this).data("tipo_tramite"),
+//                        $(this).data("cuce"),
+//                        $(this).data("cod_w")
+//       );
+
+        //return confirm('¿Desea AVANZAR esta transaccion ?');
     });
 }
 
-function ajax_restriccion(boton,cod_transaccion,cod_estado,cod_tramite,tipo_tramite,cuce,cod_w){
+function ajax_restriccion(boton, cod_transaccion, cod_estado, cod_tramite, tipo_tramite, cuce, cod_w) {
     var sw = false;
     $.ajax({
         type: 'post',
@@ -38,63 +69,63 @@ function ajax_restriccion(boton,cod_transaccion,cod_estado,cod_tramite,tipo_tram
             //alert("Exito!!!"+json.Items);
             var alertas = json.Items.split(",");
             $.each(alertas, function(index, item) {
-                if(item === "0"){
-                    if(index === 0){
+                if (item === "0") {
+                    if (index === 0) {
                         //alert("Restriccion Cantidad "+index+" :/");
                         $("#dialog_restriccion_cantidad").html("<span style='color:red'>TODOS LOS ITEMS DEBEN TENER UNA CANTIDAD MAYOR A 0</span>");
                         $("#dialog_restriccion_cantidad").dialog("open");
-                        sw=true;
+                        sw = true;
                     }
-                        
-                    if(index === 1){
+
+                    if (index === 1) {
 //                        alert("Restriccion Precio "+index+" :/");
-                          $("#dialog_restriccion_precio").html("<span style='color:red'>TODOS LOS ITEMS DEBEN TENER UN PRECIO MAYOR A 0</span>");
-                          $("#dialog_restriccion_precio").dialog("open");
-                          sw=true;
+                        $("#dialog_restriccion_precio").html("<span style='color:red'>TODOS LOS ITEMS DEBEN TENER UN PRECIO MAYOR A 0</span>");
+                        $("#dialog_restriccion_precio").dialog("open");
+                        sw = true;
                     }
-                        
-                    if(index === 2){
+
+                    if (index === 2) {
 //                        alert("Restriccion Unidad Medida "+index+" :/");ç
-                          $("#dialog_restriccion_unidad_medida").html("<span style='color:red'>TODOS LOS ITEMS DEBEN TENER UNIDAD DE MEDIDA</span>");
-                          $("#dialog_restriccion_unidad_medida").dialog("open");
-                          sw=true;
+                        $("#dialog_restriccion_unidad_medida").html("<span style='color:red'>TODOS LOS ITEMS DEBEN TENER UNIDAD DE MEDIDA</span>");
+                        $("#dialog_restriccion_unidad_medida").dialog("open");
+                        sw = true;
                     }
-                        
-                    if(index === 3){
+
+                    if (index === 3) {
 //                        alert("Restriccion Detalle "+index+" :/");
-                          $("#dialog_restriccion_detalle").html("<span style='color:red'>TODOS LOS ITEMS DEBEN TENER UN DETALLE</span>");
-                          $("#dialog_restriccion_detalle").dialog("open");
-                          sw=true;
+                        $("#dialog_restriccion_detalle").html("<span style='color:red'>TODOS LOS ITEMS DEBEN TENER UN DETALLE</span>");
+                        $("#dialog_restriccion_detalle").dialog("open");
+                        sw = true;
                     }
-                    
-                    if(index === 4){
+
+                    if (index === 4) {
 //                        alert("Restriccion Detalle "+index+" :/");
-                          $("#dialog_restriccion_size").html("<span style='color:red'>EL FORMULARIO DEBE TENER AL MENOS UN ITEM</span>");
-                          $("#dialog_restriccion_size").dialog("open");
-                          sw=true;
+                        $("#dialog_restriccion_size").html("<span style='color:red'>EL FORMULARIO DEBE TENER AL MENOS UN ITEM</span>");
+                        $("#dialog_restriccion_size").dialog("open");
+                        sw = true;
                     }
-                }                     
+                }
             });
 //            if(sw)
 //                return;
 //            else
 //                ajax_avanza_tramite();
-            
+
             //arma_resultados_clasificador();
             //alert("yeihhh");
             //arma_resultados_clasificador(json,c,Limite,sw_paginacion,total_filas);
             //genera_lista_items(json);
         },
-        complete: function(){
-            if(sw)
+        complete: function() {
+            if (sw)
                 return;
             else
-                ajax_avanza_tramite(boton,cod_transaccion,cod_estado,cod_tramite,tipo_tramite,cuce,cod_w);
+                ajax_avanza_tramite(boton, cod_transaccion, cod_estado, cod_tramite, tipo_tramite, cuce, cod_w);
         }
     });
 }
 
-function ajax_avanza_tramite(boton,cod_transaccion,cod_estado,cod_tramite,tipo_tramite,cuce,cod_w){
+function ajax_avanza_tramite(boton, cod_transaccion, cod_estado, cod_tramite, tipo_tramite, cuce, cod_w) {
     //console.log("wujuu");
 //    alert("Oka!!! "+$(".btn-avanza").data("cod_estado"));
 //    alert("Oka!!! "+$(".btn-avanza").data("cod_tramite"));
@@ -102,8 +133,8 @@ function ajax_avanza_tramite(boton,cod_transaccion,cod_estado,cod_tramite,tipo_t
 //    alert("Oka!!! "+$(".btn-avanza").data("cod_w"));
 //    alert("Oka!!! "+$(".btn-avanza").data("cuce"));
 //    alert("Oka!!! "+$(".btn-avanza").data("cod_transaccion"));
-      
-    
+
+
     $.ajax({
         type: 'get',
         url: '/capri-web/TransaccionSolicitudAvanza.umsa',
@@ -228,24 +259,24 @@ function dialogs() {
                 ajax_update_nc($(this).data('cod_trans_nro'));
             }
         },
-        open: function( event, ui ) {
+        open: function(event, ui) {
             //alert("uuuhhh"+$("#dialog_notaConformidad").data("cod_trans_nro"));
             ajax_carga_nc($(this).data('cod_trans_nro'));
             //alert($("#btn-reporteNota").html());
-            $("#btn-reporteNota").attr("href","/capri-web/reporteNotaConformidad?&cod_tramite=4&cod_trans_nro="+$(this).data("cod_trans_nro"));
+            $("#btn-reporteNota").attr("href", "/capri-web/reporteNotaConformidad?&cod_tramite=4&cod_trans_nro=" + $(this).data("cod_trans_nro"));
         }
 
 
     })
-    .parent()
-    .find('.ui-dialog-buttonset')
-    .prepend('<a id="btn-reporteNota" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" href="" target="_blank">Imprimir</a>');
-    
-    function ajax_update_nc(cod_trans_nro){
+            .parent()
+            .find('.ui-dialog-buttonset')
+            .prepend('<a id="btn-reporteNota" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" href="" target="_blank">Imprimir</a>');
+
+    function ajax_update_nc(cod_trans_nro) {
         $.ajax({
             type: 'post',
             url: '/capri-web/UpdateNotaConformidad.umsa',
-            data: $("#dialog_notaConformidad form").serialize()+"&cod_trans_nro="+cod_trans_nro,
+            data: $("#dialog_notaConformidad form").serialize() + "&cod_trans_nro=" + cod_trans_nro,
 //            dataType: 'json',
             error: function(xhr, ajaxOptions, thrownError) {
                 alert(":( ERROR: " + xhr + " " + ajaxOptions + " " + thrownError);
@@ -265,9 +296,9 @@ function dialogs() {
             }
         });
     }
-    function ajax_carga_nc(cod_trans_nro){
+    function ajax_carga_nc(cod_trans_nro) {
 //        alert("Wujuuu :P");
-        
+
         $.ajax({
             type: 'get',
             url: '/capri-web/GetNotaConformidad.umsa',
@@ -293,10 +324,14 @@ function dialogs() {
 //    function arma_nc(json){
 //        
 //    }
-    $('#myCustomLink').click(function () {
+    $('#myCustomLink').click(function() {
         alert('my custom message');
     });
-    
+
+//    $("#dialog_avanza").dialog({
+//        
+//
+//    });
     $("#dialog_restriccion_size").dialog({
         autoOpen: false,
         width: 500,
@@ -327,7 +362,7 @@ function dialogs() {
         height: 'auto',
         modal: true
     });
-    
+
     $("#dialog_carga").dialog({
         autoOpen: false,
         width: 500,
@@ -418,7 +453,7 @@ function botones() {
     $("#btn_archivo_adjunto").button();
     $("#btn-poa").on("click", poa);
     $("#btn-poa_padre").on("click", poa_padre);
-    $(".btn_nc").on("click", function(){
+    $(".btn_nc").on("click", function() {
         dialog_nota_conformidad($(this).attr('data-cod_trans_nro'))
     });
 }
