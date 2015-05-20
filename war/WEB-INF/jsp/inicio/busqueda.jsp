@@ -116,11 +116,8 @@
                     </tr>
                 </thead>
 
-                <tbody>
-                    hola
-                   
-                </tbody>
-                <p>Hla</p>
+                <tbody></tbody>
+                
             </table>
             <div class="menu_paginacion" hidden>
                 <input class="btn_anterior" type="button" value="Anterior"/>

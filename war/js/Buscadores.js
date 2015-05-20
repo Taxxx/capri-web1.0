@@ -492,7 +492,7 @@ function arma_resultados_transacciones(json, c, Limite, sw_paginacion, total_fil
     var x=$(".tabla_resultados table tbody");
     x.empty();
     var nro_paginas = Math.ceil(json.total_filas/Limite);
-    alert(json.total_filas);
+    //alert(json.total_filas);
     if(json.total_filas>0){
         var nro;
         $.each(json.Transacciones, function(index, item){
