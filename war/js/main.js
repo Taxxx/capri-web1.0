@@ -336,31 +336,56 @@ function dialogs() {
         autoOpen: false,
         width: 500,
         height: 'auto',
-        modal: true
+        modal: true,
+        buttons: {
+            'OK': function(){
+                $(this).dialog("close");
+            }
+        }
     });
     $("#dialog_restriccion_cantidad").dialog({
         autoOpen: false,
         width: 500,
         height: 'auto',
-        modal: true
+        modal: true,
+        buttons: {
+            'OK': function(){
+                $(this).dialog("close");
+            }
+        }
     });
     $("#dialog_restriccion_precio").dialog({
         autoOpen: false,
         width: 500,
         height: 'auto',
-        modal: true
+        modal: true,
+        buttons: {
+            'OK': function(){
+                $(this).dialog("close");
+            }
+        }
     });
     $("#dialog_restriccion_unidad_medida").dialog({
         autoOpen: false,
         width: 500,
         height: 'auto',
-        modal: true
+        modal: true,
+        buttons: {
+            'OK': function(){
+                $(this).dialog("close");
+            }
+        }
     });
     $("#dialog_restriccion_detalle").dialog({
         autoOpen: false,
         width: 500,
         height: 'auto',
-        modal: true
+        modal: true,
+        buttons: {
+            'OK': function(){
+                $(this).dialog("close");
+            }
+        }
     });
 
     $("#dialog_carga").dialog({
