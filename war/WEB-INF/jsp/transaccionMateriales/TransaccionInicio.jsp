@@ -109,11 +109,10 @@
                                 <label>Tipo Proceso </label>
                                 <select id="cod_w" name="cod_w" required>
                                     <option value="0"> -- Escoja un tipo de Proceso --</option>
-                                    <option value="1">SOLICITUD DE MATERIALES Y/O ACTIVOS</option>
+                                    <option value="1">SOLICITUD DE MATERIALES Y/O ACTIVOS (BIENES)</option>
                                     <option value="3">CONSULTORIAS</option> 
                                     <option value="4">OBRAS</option>
                                     <option value="6">SERVICIOS</option>
-                                    <option value="7">BIENES</option>
                                 </select>
                             </p>
                             <p>
