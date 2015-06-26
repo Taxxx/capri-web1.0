@@ -80,6 +80,7 @@ public class FileUploadServlet implements Controller  {
 
         // constructs the directory path to store upload file
         // this path is relative to application's directory
+        // IMPORTANTE :D
         String uploadPath = request.getSession().getServletContext().getRealPath("/../")
                         + File.separator + UPLOAD_DIRECTORY;
         System.out.println("--------------------"+uploadPath+"--------------------");
@@ -92,8 +93,8 @@ public class FileUploadServlet implements Controller  {
         
         String tipo_transaccion=request.getParameter("tipo_transaccion");
         
-        String tipo_tramite =request.getParameter("tipo_tramite");
-        String cod_tramite =request.getParameter("cod_tramite");
+        String tipo_tramite = request.getParameter("tipo_tramite");
+        String cod_tramite = request.getParameter("cod_tramite");
         String cod_w =request.getParameter("cod_w");
         String cod_transaccion =request.getParameter("cod_transaccion");
         

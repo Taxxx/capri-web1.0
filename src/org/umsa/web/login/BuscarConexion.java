@@ -32,10 +32,12 @@ public class BuscarConexion implements Controller {
               
     if (apodo.equals("")||clave.equals(""))
         return new ModelAndView("login/LoginEntrada", "mensaje", "datos incompletos");
-        
+    
+    int gestion = Integer.parseInt(request.getParameter("gestion").trim());
     Clientes clienteSes = new Clientes();
     clienteSes.setApodo(apodo);
     clienteSes.setClave(clave);
+    clienteSes.setGestion(gestion);
 
 
 /* NO FUNCIONA
@@ -51,7 +53,7 @@ public class BuscarConexion implements Controller {
   */
     Clientes existeCliente=this.adqui.getCodigoUsuario(clienteSes);
 
-    int gestion=0;
+    
     if (existeCliente==null) {
       System.out.println("================ Nulo !!!! ======================");  
       return new ModelAndView("verCuerpo/VerCuerpo", "mensaje", "Usuario Inexistente o Caduco su ingreso");
@@ -59,7 +61,7 @@ public class BuscarConexion implements Controller {
     else { 
 //           Date hoy = new Date();
 //           gestion= Integer.parseInt(i_formatterDate.getStrYear(hoy));
-        gestion = Integer.parseInt(request.getParameter("gestion").trim());
+        //gestion = 
         Roles rol = new Roles();
         List rolCliente= this.adqui.getRolUsuario(existeCliente);
         int i=0;

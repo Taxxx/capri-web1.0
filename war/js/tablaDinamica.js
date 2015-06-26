@@ -393,7 +393,7 @@ function ajax_loadDetalle(cod_trans_detalle){
 }
 
 function ajax_addItem(cod_transaccion,gestion, indice, unidad_medida){
-//    alert(":P "+cod_transaccion+" - "+gestion);
+//    alert("cod_transaccion: "+cod_transaccion+", gestion: "+gestion+", indice: "+indice+" ");
     $.ajax({
         type: 'post',
         url: '/capri-web/addItem.umsa',

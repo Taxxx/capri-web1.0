@@ -10,7 +10,10 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.rmi.RemoteException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,13 +32,15 @@ import org.umsa.ConnectADQUI.AdquiWS_PortType;
 import org.umsa.domain.Roles;
 import org.umsa.domain.Transaccion;
 import org.umsa.domain.logic.MiFacade;
-import org.umsa.web.herramientas.i_formatterDate;
+//import org.umsa.web.herramientas.i_formatterDate;
+//import static org.umsa.web.herramientas.i_formatterDate.i_conveterStandardToDate;
 
 /**
  *
- * @author UMSA-JES
+ * @author Henrry
  */
 public class ReporteNotaConformidad2 extends HttpServlet {
+//    private Date date_ux;
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -98,7 +103,9 @@ public class ReporteNotaConformidad2 extends HttpServlet {
             //Map[] datos=puerto.getReportePedidox(Integer.parseInt(cod_trans_nro),cod_estado,Integer.parseInt(cod_tramite));
             System.out.println("Hasta aca sin problemas!!!! :P :P :P :P :P :P :P --> "+Integer.parseInt(cod_trans_nro.trim()));
             Map[] datos=puerto.getReporteNotaConformidadx(Integer.parseInt(cod_trans_nro.trim()),"C",4);            
-            //Map[] datos=puerto.getReportePedidox(Integer.parseInt(cod_trans_nro.trim()),"C",3);            
+            //Map[] datos=puerto.getReportePedidox(Integer.parseInt(cod_trans_nro.trim()),"C",3);   
+//            SimpleDateFormat formatoDelTexto = new SimpleDateFormat("yyyy-MM-dd");
+//            String fecha;
             int i=0;
             String cod_trans_detalle,aux = null;
             if (datos!=null){                 
@@ -110,6 +117,10 @@ public class ReporteNotaConformidad2 extends HttpServlet {
                     trans.setCiudad(datos[f].get("CIUDAD").toString());
                     trans.setLugar(datos[f].get("LUGAR").toString());
                     trans.setHora_nc(datos[f].get("HORA_NC").toString());
+                    
+                    System.out.println("hola");
+                    
+                    
                     trans.setFecha_nc(datos[f].get("FECHA_NC").toString());
                     
                     trans.setUsuario_sol(datos[f].get("USUARIO_SOL").toString());
@@ -176,7 +187,7 @@ public class ReporteNotaConformidad2 extends HttpServlet {
             datos=puerto.getTramite(Integer.parseInt(cod_tramite));
             //String titulo= datos[0].get("TIPO_REPORTE").toString();
             
-            parameters.put("logo_umsa", imagen.getPath());
+            parameters.put("imagen", imagen.getPath());
             parameters.put("titulo", "Nota de Conformidad");
             parameters.put("ciudad", "La Paz-Bolivia");
             parameters.put("hora", "13:45");

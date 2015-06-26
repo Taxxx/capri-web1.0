@@ -14,17 +14,14 @@ function restricciones() {
         event.preventDefault();
         //alert("Hola Mamá!!!!");
         //$("#dialog_avanza").data("boton",$(this));
-        $("#dialog_avanza").html("<span>¿Esta seguro de avanzar el tramite?</span>");
+        $("#dialog_avanza").html("<span>&iquest;Esta seguro de avanzar el tramite?</span>");
         $("#dialog_avanza").dialog({
             autoOpen: false,
             width: 500,
             height: 'auto',
             modal: true,
             buttons: {
-                'NO': function() {
-                    //alert($(this).data('cod_trans_nro'));
-                    $(this).dialog('close');
-                },
+                
                 'SI': function() {
 
                     ajax_restriccion(boton, boton.data("cod_transaccion"),
@@ -39,6 +36,10 @@ function restricciones() {
 //                    $(this).dialog('close');
 //                    alert($("#dialog_notaConformidad form").serialize());
 //                    ajax_update_nc($(this).data('cod_trans_nro'));
+                },
+                'NO': function() {
+                    //alert($(this).data('cod_trans_nro'));
+                    $(this).dialog('close');
                 }
             }
         });
