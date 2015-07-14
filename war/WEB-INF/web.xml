@@ -123,6 +123,16 @@
     </servlet-mapping>
     
     <servlet>
+        <servlet-name>reporteItems1</servlet-name>
+        <servlet-class>org.umsa.web.transaccionMateriales.reportes.ReporteItems1</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>reporteItems1</servlet-name>
+        <url-pattern>/reporteItems1</url-pattern>
+    </servlet-mapping>
+    
+    
+    <servlet>
         <servlet-name>reporteSolicitud</servlet-name>
         <servlet-class>org.umsa.web.transaccionMateriales.reportes.ReporteSolicitud</servlet-class>
     </servlet>

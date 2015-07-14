@@ -22,16 +22,7 @@
         </script>
     </head>
     <body>
-        <!--
-        <nav id="prueba_nav">
-            <ul>
-                <li>1</li>
-                <li>2</li>
-                <li>3</li>
-                <li>4</li>
-            </ul>
-        </nav>
-        -->
+        
         <%--<c:if test="${!empty rol}">--%>
         <div id="menu_operaciones">
            
@@ -57,22 +48,7 @@
                             <div id="img_pedidos"></div>
                            Pedido de materiales</a>
                     </li>
-                    <%--li>
-                        <a href="<c:url value="/TransaccionConsultoriasBandeja.umsa">
-                           <c:param name="cod_tramite" value="1"/>
-                           <c:param name="cod_w" value="3"/>
-                           </c:url>" target="cuerpo_transaccionx" >
-                            <div id="img_consultor"></div>
-                           Consultores</a>   
-                    </li>
-                    <li>
-                        <a href="<c:url value="/TransaccionObrasBandeja.umsa">
-                           <c:param name="cod_tramite" value="1"/>
-                           <c:param name="cod_w" value="4"/>
-                           </c:url>" target="cuerpo_transaccionx" >
-                            <div id="img_obras"></div>
-                           Obras</a>   
-                    </li--%>
+                    
                     <li>
                         <a href="<c:url value="/TransaccionListaSolicitudes.umsa">
                            <c:param name="cod_tramite" value="1"/>
@@ -86,10 +62,46 @@
                            </c:url>" target="cuerpo_transaccionx" >
                             <div id="img_lista_pedidos"></div>
                            Lista de Pedido de Materiales</a>   
-                    </li>                                                      
+                    </li>
+                    <li>
+                        <a href="#" id="btn_reportes">Reportes</a>
+                    </li>
                 </ul>
 
             </nav>
+        </div>
+        <div id="dialog_reportes" title="Reportes">
+            
+            
+            <div id="tabs">
+                <ul>
+                    <li><a href="#tabs-1">Items</a></li>
+                    <li><a href="#tabs-2">Enviados</a></li>
+                </ul>
+                <div id="tabs-1">
+                    <form>
+                        <label>Tipo Item:</label>
+                        <select id="select_item">
+                            <option>x1</option>
+                            <option>x2</option>
+                            <option>x3</option>
+                        </select>
+                        
+                        <label>Partida:</label>
+                        <select id="select_partidas">
+                            <option>z1</option>
+                            <option>z2</option>
+                            <option>z3</option>
+                        </select>
+                    </form>
+                    
+                </div>
+                <div id="tabs-2">
+                    wujuuu!!!!
+                </div>
+            </div>
+            
+            
         </div>
         <%--</c:if>--%> 
         <iframe name="cuerpo_transaccionx" id="cuerpo_transaccionx" src="/capri-web/TransaccionMateriales.umsa?cod_tramite=1&cod_w=1" >

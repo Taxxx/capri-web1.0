@@ -5,7 +5,69 @@ function inicia() {
     botones();
     dialogs();
     restricciones();
+    $( "#tabs" ).tabs();
+//    ajax_genera_partidas(2014);
+//    ajax_genera_items_all();
     // mensaje_registro();
+    //$("#dialog_reportes form").css("color","red");
+    
+    
+}
+
+function ajax_genera_partidas(gestion){
+    $.ajax({
+        type: 'post',
+        url: '/capri-web/GetPartidas.umsa',
+        data:{gestion:gestion},
+        dataType: 'json',
+        error: function(xhr, ajaxOptions, thrownError) {
+            alert(":( ERROR: "+xhr+" "+ajaxOptions+" "+thrownError);
+        },
+        success: function(json) {
+            //arma_resultados_clasificador();
+            //alert("yeihhh");
+            //arma_resultados_clasificador(json,c,Limite,sw_paginacion,total_filas);
+            genera_partidas(json);
+        }
+    });
+}
+
+function genera_partidas(json){
+    var x=$("#select_partidas");
+    x.html("<option value=''>Ninguna</option>");
+    $.each(json.Partidas, function(index, item){
+        x.append("<option value="+item.partida+">"+item.detalle_partida+"</option>");
+    });
+    //alert("yeih: "+gestion);
+}
+
+function ajax_genera_items_all(){
+    //alert("hola!!!");
+    $.ajax({
+        type: 'post',
+        url: '/capri-web/GetItems2.umsa',
+        //data:{gestion:gestion},
+        dataType: 'json',
+        async: false,
+        error: function(xhr, ajaxOptions, thrownError) {
+            alert(":( ERROR: "+xhr+" "+ajaxOptions+" "+thrownError);
+        },
+        success: function(json) {
+            //arma_resultados_clasificador();
+            //alert("yeihhh");
+            //arma_resultados_clasificador(json,c,Limite,sw_paginacion,total_filas);
+            genera_items_all(json);
+        }
+    });
+}
+
+function genera_items_all(json){
+    var x=$("#select_item");
+    x.html("<option value=''>Ninguna</option>");
+    $.each(json.Items, function(index, item){
+        x.append("<option value="+item.cod_item+">"+item.articulo+"</option>");
+    });
+    //alert("yeih: "+gestion);
 }
 
 function restricciones() {
@@ -127,15 +189,7 @@ function ajax_restriccion(boton, cod_transaccion, cod_estado, cod_tramite, tipo_
 }
 
 function ajax_avanza_tramite(boton, cod_transaccion, cod_estado, cod_tramite, tipo_tramite, cuce, cod_w) {
-    //console.log("wujuu");
-//    alert("Oka!!! "+$(".btn-avanza").data("cod_estado"));
-//    alert("Oka!!! "+$(".btn-avanza").data("cod_tramite"));
-//    alert("Oka!!! "+$(".btn-avanza").data("tipo_tramite"));
-//    alert("Oka!!! "+$(".btn-avanza").data("cod_w"));
-//    alert("Oka!!! "+$(".btn-avanza").data("cuce"));
-//    alert("Oka!!! "+$(".btn-avanza").data("cod_transaccion"));
-
-
+ 
     $.ajax({
         type: 'get',
         url: '/capri-web/TransaccionSolicitudAvanza.umsa',
@@ -153,11 +207,7 @@ function ajax_avanza_tramite(boton, cod_transaccion, cod_estado, cod_tramite, ti
             alert(":( ERROR: " + xhr + " " + ajaxOptions + " " + thrownError);
         },
         success: function(json) {
-            //arma_resultados_clasificador();
-            //alert("yeihhh");
-            //arma_resultados_clasificador(json,c,Limite,sw_paginacion,total_filas);
-//            genera_lista_items(json);
-            //boton.parents(":eq(1)").css("background","red");
+           
             boton.parents(":eq(1)").remove();
             //alert("Exito :D");
         }
@@ -465,6 +515,26 @@ function dialogs() {
             }
         }
     });
+    $("#dialog_reportes").dialog({
+        modal: true,
+        autoOpen: false,
+        height: 250,
+        width: 450,
+        buttons: {
+            
+            'Ver Reporte': function(){
+                alert("hola palusa");
+            },
+            Ok: function() {
+                $(this).dialog("close");
+            }
+        },
+        open: function(){
+            //alert("hola payaso!!!");
+            ajax_genera_partidas(2014);
+            ajax_genera_items_all();
+        }
+    });
 }
 function botones() {
     //estilo_botones();
@@ -482,6 +552,10 @@ function botones() {
     $(".btn_nc").on("click", function() {
         dialog_nota_conformidad($(this).attr('data-cod_trans_nro'))
     });
+    $("#btn_reportes").on("click", function() {
+        $("#dialog_reportes").dialog("open");
+    });
+    
 }
 function dialog_nota_conformidad(cod_trans_nro) {
     $("#dialog_notaConformidad").data('cod_trans_nro', cod_trans_nro);

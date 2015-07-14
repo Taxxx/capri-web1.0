@@ -293,6 +293,9 @@
     <bean name="/GetItems.umsa" class="org.umsa.web.operaciones.GetItems">
         <property name="adqui"><ref bean="adqui"/></property>
     </bean>
+    <bean name="/GetItems2.umsa" class="org.umsa.web.operaciones.GetItems2">
+       
+    </bean>
     <bean name="/GetEnviadosDetalle.umsa" class="org.umsa.web.operaciones.EnviadosDetalle">
         <property name="adqui"><ref bean="adqui"/></property>
     </bean>

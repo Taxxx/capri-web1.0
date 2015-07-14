@@ -346,7 +346,7 @@ th, td{
     //font-size: 0.5em;
     //min-width: 600px;
 }
-#img_solicitud, #img_pedidos, #img_consultor, #img_obras, #img_lista_solicitud, #img_lista_pedidos{
+#img_solicitud, #img_pedidos, #img_consultor, #img_obras, #img_lista_solicitud, #img_lista_pedidos, #btn_reportes{
     float: left;
     display: inline-block;
     height: 16px;
@@ -359,6 +359,7 @@ th, td{
 #img_obras{background: url("../img/house.png");}
 #img_lista_solicitud{background: url("../img/ordenes.png");}
 #img_lista_pedidos{background: url("../img/pedidos.gif");}
+#btn_reportes{background: url("../img/clipboard_16.png");}
 
 /*table, th, td{
 	border: solid 1px;
