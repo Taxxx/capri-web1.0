@@ -21,8 +21,10 @@ function Total(){
     $("#mainTable tbody tr").each(function(){
         subtotal = $(this).find(".cantidad input").val()*$(this).find(".precio input").val();
 //        alert("ah Ok -> "+subtotal);
-        $(this).find(".subtotal").html(subtotal);
         sum = sum+subtotal;
+        subtotal = subtotal.toFixed(2);
+        $(this).find(".subtotal").html(subtotal);
+       
        
 //        $(this).css("background","red");
 //        alert("ups");
