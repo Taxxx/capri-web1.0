@@ -29,6 +29,7 @@ function Total(){
 //        $(this).css("background","red");
 //        alert("ups");
     });
+    sum = sum.toFixed(2);
     $("#total").html(sum);
 }
 function getSelectData(){

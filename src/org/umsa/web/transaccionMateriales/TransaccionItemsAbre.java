@@ -51,6 +51,11 @@ public class TransaccionItemsAbre implements Controller {
         trans.setCod_transaccion(Integer.parseInt(cod_transaccion));
         trans.setCod_tramite(Integer.parseInt(cod_tramite));
         trans.setCod_almacen(cliente.getCod_almacen());
+        
+//        System.out.println("<> cod_transaccion: "+cod_transaccion);
+//        System.out.println("<> cod_tramite: "+cod_tramite);
+//        System.out.println("<> cod_almacen: "+cliente.getCod_almacen());
+        
         Transaccion items = this.adqui.getTransaccionMaterial(trans);
         
         System.out.println("1============================ El codigo del usuario es: "+cliente.getId_usuario());
@@ -66,7 +71,7 @@ public class TransaccionItemsAbre implements Controller {
         o.setCod_transaccion(cod_transaccion);
         
         
-        System.out.println("La fechinga es --> -->"+items.getNro_gestion());
+//        System.out.println("La fechinga es --> -->"+items.getNro_gestion());
 
         Map modelo = new HashMap();        
 

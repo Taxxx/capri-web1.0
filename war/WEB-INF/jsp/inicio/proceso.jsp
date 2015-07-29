@@ -63,9 +63,9 @@
                             <div id="img_lista_pedidos"></div>
                            Lista de Pedido de Materiales</a>   
                     </li>
-                    <li>
+                    <!--li>
                         <a href="#" id="btn_reportes">Reportes</a>
-                    </li>
+                    </li-->
                 </ul>
 
             </nav>

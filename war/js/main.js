@@ -190,6 +190,7 @@ function ajax_restriccion(boton, cod_transaccion, cod_estado, cod_tramite, tipo_
 
 function ajax_avanza_tramite(boton, cod_transaccion, cod_estado, cod_tramite, tipo_tramite, cuce, cod_w) {
  
+    //alert("Wujuuuu");
     $.ajax({
         type: 'get',
         url: '/capri-web/TransaccionSolicitudAvanza.umsa',

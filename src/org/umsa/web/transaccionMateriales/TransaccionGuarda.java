@@ -78,6 +78,7 @@ public class TransaccionGuarda implements Controller {
             System.out.println("El cod_w es: "+cod_w);
             cod_w="2";
             trans.setCod_w(Integer.parseInt(cod_w));
+            trans.setCod_almacen(cliente.getCod_almacen());
             
         }else{
             trans.setCod_w(Integer.parseInt(cod_w));
