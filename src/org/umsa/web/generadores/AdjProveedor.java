@@ -16,6 +16,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
 import org.umsa.ConnectADQUI.AdquiWSServiceLocator;
 import org.umsa.ConnectADQUI.AdquiWS_PortType;
+import org.umsa.domain.Clientes;
 
 /**
  *
@@ -55,6 +56,9 @@ public class AdjProveedor implements Controller{
         JSONObject Listado = new JSONObject();
         JSONArray datos= new JSONArray();
         
+        
+        Clientes cliente=new Clientes();
+        cliente=(Clientes) request.getSession().getAttribute("__sess_cliente");
         try {
             AdquiWSServiceLocator servicio = new AdquiWSServiceLocator();
             AdquiWS_PortType puerto = servicio.getAdquiWS();
@@ -96,7 +100,7 @@ public class AdjProveedor implements Controller{
                   e = puerto.getNroOrdenCompra(Integer.parseInt(cod_transaccion));
                   if (e == null) {
                       //System.out.println("Sin Orden de compra - Tamaño: "+e[0].get("NRO").toString());
-                      e = puerto.setCreaNroTramite("SET-upDateGeneraTramite", Integer.parseInt(cod_transaccion), 3, 2, 2015, Integer.parseInt(cod_trans_nro),0);
+                      e = puerto.setCreaNroTramite("SET-upDateGeneraTramite", Integer.parseInt(cod_transaccion), cliente.getCod_almacen(), 2, 2015, Integer.parseInt(cod_trans_nro),0);
                       if (e != null) {
                          cod_trans_nro_nuevo = Integer.parseInt(e[0].get("COD_TRANS_NRO").toString());
                          System.out.println("El nuevo cod_trans_nro es: "+cod_trans_nro);

@@ -102,39 +102,62 @@ public class ReporteOrdenDescargo2 extends HttpServlet {
                 
                 System.out.println("GO GO GO GO..... cod_trans_nro: "+cod_transaccion+" cod_estado: "+cod_estado+" cod_tramite: 2");
                 Map[] datos=puerto.getReporteOrdenDescargox(Integer.parseInt(cod_transaccion),cod_estado,2);    
-                if (datos!=null){                 
+                if (datos!=null){
+                    System.err.println("con datos!!!!");
                     Map map = new HashMap();
                     int i=0;
                     String cod_trans_detalle,aux = null;
 //                    S
                     for (int f=0;f<datos.length;f++){
                         Transaccion trans = new Transaccion();
+                        
                         trans.setNro_gestion(datos[f].get("NRO_GESTION").toString());
+                        System.err.println("nro_gestion: "+datos[f].get("NRO_GESTION").toString());
                         trans.setFecha_creacion(i_formatterDate.i_conveterStandardToDate(datos[f].get("FECHA_CREACION").toString()));
+                        System.err.println("fecha_creacion: "+datos[f].get("FECHA_CREACION").toString());
                         trans.setFecha_envio(i_formatterDate.i_conveterStandardToDate(datos[f].get("FECHA_ENVIO").toString()));
+                        System.err.println("fecha_envio: "+datos[f].get("FECHA_ENVIO").toString());
                         trans.setUnidad_sol(datos[f].get("UNIDAD_SOL").toString());
+                        System.err.println("unidad_sol: "+datos[f].get("UNIDAD_SOL").toString());
                         trans.setUnidad_des(datos[f].get("UNIDAD_DES").toString());
+                        System.err.println("unidad_des: "+datos[f].get("UNIDAD_DES").toString());
                         trans.setUsuario_sol(datos[f].get("USUARIO_SOL").toString());
+                        System.err.println("usuario_sol: "+datos[f].get("USUARIO_SOL").toString());
                         trans.setDetalle(datos[f].get("DETALLE").toString());
+                        System.err.println("detalle: "+datos[f].get("DETALLE").toString());
                         trans.setUnidad_medida(datos[f].get("UNIDAD_MEDIDA").toString());
+                        System.err.println("unidad_medida: "+datos[f].get("UNIDAD_MEDIDA").toString());
                         trans.setUser_maker(datos[f].get("USER_MAKER").toString());
+                        System.err.println("user_maker: "+datos[f].get("USER_MAKER").toString());
                         trans.setCantidad_pedido(Integer.parseInt(datos[f].get("CANTIDAD_PEDIDO").toString()));
+                        System.err.println("cantidad_pedido: "+datos[f].get("CANTIDAD_PEDIDO").toString());
                         //trans.setCantidad_pedido(datos[f].get("CANTIDAD_PEDIDO").toString());
                         //trans.setTipo_item("00");
                         //trans.setTipo_item(datos[f].get("TIPO_ITEM").toString());
                         trans.setArticulo(datos[f].get("ARTICULO").toString());
-                        trans.setDetalle_solicitud(datos[f].get("DETALLE_SOLICITUD").toString());                        
+                        System.err.println("articulo: "+datos[f].get("ARTICULO").toString());
+                        trans.setDetalle_solicitud(datos[f].get("DETALLE_SOLICITUD").toString());
+                        System.err.println("detalle_solicitud: "+datos[f].get("DETALLE_SOLICITUD").toString());
                         trans.setHoja_ruta(datos[f].get("HOJA_RUTA").toString());
+                        System.err.println("hoja_ruta: "+datos[f].get("HOJA_RUTA").toString());
                         trans.setCbte(datos[f].get("CBTE").toString());
+                        System.err.println("cbte: "+datos[f].get("CBTE").toString());
                         trans.setCasa_comercial(datos[f].get("CASA_COMERCIAL").toString());
+                        System.err.println("casa_comercial: "+datos[f].get("CASA_COMERCIAL").toString());
                         trans.setDireccion(datos[f].get("DIRECCION").toString());
+                        System.err.println("direccion: "+datos[f].get("DIRECCION").toString());
                         trans.setTelefono(datos[f].get("TELEFONO").toString());
+                        System.err.println("telefono: "+datos[f].get("TELEFONO").toString());
                         trans.setNit(datos[f].get("NIT").toString());
+                        System.err.println("nit: "+datos[f].get("NIT").toString());
                         trans.setPrecio_unit(Double.parseDouble(datos[f].get("PRECIO_UNIT").toString()));
-                        System.out.println("PRECIO U. -----> "+datos[f].get("PRECIO_UNIT").toString());
+                        System.err.println("precio_unit: "+datos[f].get("PRECIO_UNIT").toString());
                         trans.setPartida(datos[f].get("PARTIDA").toString());
+                        System.err.println("partida: "+datos[f].get("PARTIDA").toString());
                         trans.setNro_transaccion(Integer.parseInt(datos[f].get("NRO_TRANSACCION").toString()));
+                        System.err.println("nro_transaccion: "+datos[f].get("NRO_TRANSACCION").toString());
                         cod_trans_detalle=datos[f].get("COD_TRANS_DETALLE").toString();
+                        System.err.println("cod_trans_detalle: "+datos[f].get("COD_TRANS_DETALLE").toString());
                         if(!cod_trans_detalle.equals(aux)){
                             i++;
                             System.out.println("El indice es wujuuu: "+i);
@@ -144,21 +167,26 @@ public class ReporteOrdenDescargo2 extends HttpServlet {
                         trans.setCod_trans_detalle(cod_trans_detalle);
                         list.add(trans);
                     }                                                                                            
-                }                         
+                }
+                else
+                    System.err.println("VACIO!!!!!!!!!!!!!");
                 /*for (int i = 0; i < list.size(); i++) {
                     Transaccion aux = (Transaccion) list.get(i);            
                     System.out.println(aux.getNro_gestion()+" "+aux.getFecha_creacion()+" "+ aux.getFecha_envio()+" "+aux.getUnidad_sol()+" "+aux.getUnidad_des()+" "+aux.getUsuario_sol()+" "+aux.getUnidad_medida()+" "+aux.getCantidad_pedido()+" "+aux.getTipo_item()+" "+aux.getArticulo()+" "+aux.getDetalle_solicitud());
                 }   */    
                 datos= puerto.getTotal2(Integer.parseInt(cod_transaccion));
                 if (datos!=null){
-                    System.out.println("*****************************///////////////////   Total: "+TotalTexto(datos[0].get("TOTAL").toString()));
+                    System.err.println("*****************************///////////////////   Total: "+TotalTexto(datos[0].get("TOTAL").toString()));
                     parameters.put("TxtTotal",TotalTexto(datos[0].get("TOTAL").toString())); 
                 }
                     
                     
                 datos= puerto.getTramite(2);
-                if (datos!=null)
-                    parameters.put("titulo", datos[0].get("TIPO_REPORTE").toString());            
+                if (datos!=null){
+                    System.err.println("*****************************///////////////////   tipo_reporte: "+datos[0].get("TIPO_REPORTE").toString());
+                    parameters.put("titulo", datos[0].get("TIPO_REPORTE").toString());   
+                }
+                             
             }
             catch (RemoteException exxx){
                 res.setContentType("text/html");

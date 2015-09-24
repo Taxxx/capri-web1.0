@@ -163,7 +163,7 @@ public class ReporteItems1 extends HttpServlet {
             
 //            JRBeanCollectionDataSource ds =new JRBeanCollectionDataSource(list);
             Class.forName("oracle.jdbc.driver.OracleDriver");            
-            Connection conexion = DriverManager.getConnection("jdbc:oracle:thin:@200.7.160.182:1521:ADQUI", "ADQUISICIONES", "4dqu1_c3n72al");
+            Connection conexion = DriverManager.getConnection("jdbc:oracle:thin:@200.7.160.25:1521:ADQUI", "ADQUISICIONES", "4dqu1_c3n72al");
             
             bytes = JasperRunManager.runReportToPdf(reportFile.getPath(), parameters, conexion);
             res.setContentType("application/pdf");
