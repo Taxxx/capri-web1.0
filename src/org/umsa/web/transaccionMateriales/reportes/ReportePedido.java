@@ -58,7 +58,7 @@ public class ReportePedido extends HttpServlet {
             String cod_trans_nro = req.getParameter("cod_trans_nro");
             String cod_tramite = req.getParameter("cod_tramite");            
             //String cod_estado = req.getParameter("cod_estado");         
-            String cod_estado="ALM1";
+            String cod_estado="C";
             
             ServletContext context = this.getServletConfig().getServletContext();
             

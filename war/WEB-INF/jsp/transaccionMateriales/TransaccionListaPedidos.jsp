@@ -17,7 +17,7 @@
                         <thead>
                             <tr>                                
                                 <th>PEDIDO DE MATERIAL</th>
-                                <th>NOTA DE CONORMIDAD</th>
+                                <th>NOTA DE CONFORMIDAD</th>
                                 <th>SOLICITANTE</th>
                                 <th>DETALLE</th>                                
                             </tr>

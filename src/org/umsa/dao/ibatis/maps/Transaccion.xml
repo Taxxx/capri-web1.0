@@ -58,7 +58,7 @@
         SELECT distinct (t2.apertura||' - '|| t2.detalle) as detalle
         FROM adquisiciones.adm_usr_apert t1 
         inner join adquisiciones.programatic_apert t2 on t1.cod_apert = t2.cod_apert
-        WHERE t1.cod_usuario=#id_usuario# and t1.gestion=2015 and t2.estado='V'
+        WHERE t1.cod_usuario=#id_usuario# and t2.gestion=2015 and t2.estado='V'
     </select>
     
     <select id="getNroTransaccion" resultClass="java.lang.Integer">
